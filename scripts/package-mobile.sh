@@ -26,7 +26,11 @@ build_all()
 			fi
 
 			echo "Build for $platform ($abi)";
-			"$SCRIPT_DIR/build.sh" --platform=$platform --arch=$abi --enable-static;
+			if [ "$(type -t build_extfunc)" == "function" ]; then
+				build_extfunc --platform=$platform --arch=$abi --enable-static;
+			else
+				logerr_and_exit "Function build_extfunc() is not defined.";
+			fi
 		done
 	done
 }
@@ -109,7 +113,7 @@ main_run()
 
 SCRIPT_DIR=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd);
 source "$SCRIPT_DIR/common/base.sh";
-PROJECT_NAME="Elastos.SDK.Wallet.C"
+PROJECT_NAME=${CFG_PROJECT_NAME:="Unknown"}
 PACKAGE_DIR="$BUILD_BASE_DIR/package";
 
 main_run $@;
