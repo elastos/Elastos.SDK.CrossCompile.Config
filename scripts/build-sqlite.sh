@@ -17,14 +17,14 @@ download_tarball()
 
 build_sqlite()
 {
-	mkdir -p "$SQLITE_BUILDDIR" && cd "$SQLITE_BUILDDIR";
-	loginfo "change directory to $SQLITE_BUILDDIR";
+	mkdir -p "$BUILD_DIR" && cd "$BUILD_DIR";
+	loginfo "change directory to $BUILD_DIR";
 
-	if [ ! -e "$SQLITE_BUILDDIR/$SQLITE_NAME" ]; then
+	if [ ! -e "$BUILD_DIR/$SQLITE_NAME" ]; then
 		tar xf "$TARBALL_DIR/$SQLITE_TARBALL";
 	fi
 	loginfo "$SQLITE_TARBALL has been unpacked."
-	cd "$SQLITE_BUILDDIR/$SQLITE_NAME";
+	cd "$BUILD_DIR/$SQLITE_NAME";
 
 	#export CFLAGS="-DSQLITE_NOHAVE_SYSTEM"
 	./configure --prefix=$OUTPUT_DIR \
@@ -54,8 +54,7 @@ main_run()
 			;;
 	esac
 
-	SQLITE_BUILDDIR="$BUILD_DIR/sqlite";
-
+	source "$SCRIPT_DIR/tarball-config.sh";
 	download_tarball;
 
 	build_sqlite $CONFIG_PARAM;

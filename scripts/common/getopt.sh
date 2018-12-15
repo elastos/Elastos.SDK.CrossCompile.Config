@@ -15,7 +15,7 @@ getopt_parse_options()
 	getopt_ext=([0]= [1]=);
 	type getopt_extfunc_options &>/dev/null && local ret=$(getopt_extfunc_options) && getopt_ext=(${ret//;/ });
 
-	local args="--name getopt-script --options p:m:${getopt_ext[0]}h --longoptions platform:,arch:,${getopt_ext[1]},help";
+	local args="--name getopt-script --options p:f:m:${getopt_ext[0]}h --longoptions prefix:,platform:,arch:,${getopt_ext[1]},help";
 	#echo "getopt args: $args";
 
 	if [[ $GETOPT_IGNORE_UNRECOGNIZED  == true ]]; then
@@ -31,7 +31,11 @@ getopt_parse_options()
 	fi
 	while true; do
 		case "$1" in
-			(-p | --platform)
+			(-p | --prefix)
+				CFG_TARGET_BUILDROOT=$2;
+				shift 2;
+				;;
+			(-f | --platform)
 				CFG_TARGET_PLATFORM=$2;
 				shift 2;
 				;;
@@ -52,7 +56,7 @@ getopt_parse_options()
 				if ((  $getopt_extfunc_processor_ret > 0 )); then
 					shift $getopt_extfunc_processor_ret;
 				else
-					echo "Internal error!";
+					echo "Internal error! $1 $2";
 					exit 1;
 				fi
 				;;
@@ -89,7 +93,10 @@ DESCRIPTION
        getopt script.
 
 OPTIONS
-       -p, --platform=(Android | iOS)
+       -p, --prefix=PREFIX
+                 Optional. Install architecture-independent files in PREFIX
+
+       -f, --platform=(Android | iOS)
                  Optional. target platform. If unspecified, use [`uname -m`] as default.
 
        -m, --arch=(ARCH)
@@ -107,6 +114,7 @@ getopt_print_input_log()
 {
 	logtrace "*********************************************************";
 	logtrace " Input infomation";
+	logtrace "    build root      : $CFG_TARGET_BUILDROOT";
 	logtrace "    platform        : $CFG_TARGET_PLATFORM";
 	logtrace "    abi             : $CFG_TARGET_ABI";
 	logtrace "    debug verbose   : $DEBUG_VERBOSE";
@@ -117,6 +125,7 @@ CURRENT_DIR=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd);
 SCRIPT_DIR=$(dirname "$CURRENT_DIR");
 source "$SCRIPT_DIR/common/base.sh";
 
+CFG_TARGET_BUILDROOT=;
 CFG_TARGET_PLATFORM=$(uname -s);
 CFG_TARGET_ABI=;
 

@@ -47,12 +47,17 @@ else()
 endif()
 
 # enable pkg-config and set pkg-config find path
-set(CFG_BUILD_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/build/sysroot/${CFG_TARGET_PLATFORM}/${CFG_TARGET_ABI}" CACHE STRING "")
 find_package(PkgConfig REQUIRED)
-set(ENV{PKG_CONFIG_PATH} "${CFG_BUILD_ROOT}/lib/pkgconfig")
+set(ENV{PKG_CONFIG_PATH}  "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig")
+
+set(INSTALL_BIN_DIR       "${CMAKE_INSTALL_PREFIX}/bin" CACHE PATH "Installation directory for executables")
+set(INSTALL_LIB_DIR       "${CMAKE_INSTALL_PREFIX}/lib" CACHE PATH "Installation directory for libraries")
+set(INSTALL_INC_DIR       "${CMAKE_INSTALL_PREFIX}/include" CACHE PATH "Installation directory for headers")
+set(INSTALL_MAN_DIR       "${CMAKE_INSTALL_PREFIX}/share/man" CACHE PATH "Installation directory for manual pages")
+set(INSTALL_PKGCONFIG_DIR "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" CACHE PATH "Installation directory for pkgconfig (.pc) files")
 
 message(STATUS "********************************************")
-message(STATUS "CFG_TARGET_PLATFORM : ${CFG_TARGET_PLATFORM}")
-message(STATUS "CFG_TARGET_ABI      : ${CFG_TARGET_ABI}")
-message(STATUS "CFG_BUILD_ROOT      : ${CFG_BUILD_ROOT}")
+message(STATUS "CFG_TARGET_PLATFORM  : ${CFG_TARGET_PLATFORM}")
+message(STATUS "CFG_TARGET_ABI       : ${CFG_TARGET_ABI}")
+message(STATUS "CMAKE_INSTALL_PREFIX : ${CMAKE_INSTALL_PREFIX}")
 message(STATUS "*********************************************")

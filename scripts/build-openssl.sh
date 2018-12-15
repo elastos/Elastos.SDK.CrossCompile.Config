@@ -17,14 +17,14 @@ download_tarball()
 
 build_openssl()
 {
-	mkdir -p "$OPENSSL_BUILDDIR" && cd "$OPENSSL_BUILDDIR";
-	loginfo "change directory to $OPENSSL_BUILDDIR";
+	mkdir -p "$BUILD_DIR" && cd "$BUILD_DIR";
+	loginfo "change directory to $BUILD_DIR";
 
-	if [ ! -e "$OPENSSL_BUILDDIR/$OPENSSL_NAME" ]; then
+	if [ ! -e "$BUILD_DIR/$OPENSSL_NAME" ]; then
 		tar xf "$TARBALL_DIR/$OPENSSL_TARBALL";
 	fi
 	loginfo "$OPENSSL_TARBALL has been unpacked."
-	cd "$OPENSSL_BUILDDIR/$OPENSSL_NAME";
+	cd "$BUILD_DIR/$OPENSSL_NAME";
 	$@ --prefix=$OUTPUT_DIR \
 		no-asm \
 		no-shared \
@@ -58,8 +58,7 @@ main_run()
 			;;
 	esac
 
-	OPENSSL_BUILDDIR="$BUILD_DIR/openssl";
-
+	source "$SCRIPT_DIR/tarball-config.sh";
 	download_tarball;
 
 	build_openssl $CONFIG_PARAM;

@@ -17,14 +17,14 @@ download_tarball()
 
 build_curl()
 {
-	mkdir -p "$CURL_BUILDDIR" && cd "$CURL_BUILDDIR";
-	loginfo "change directory to $CURL_BUILDDIR";
+	mkdir -p "$BUILD_DIR" && cd "$BUILD_DIR";
+	loginfo "change directory to $BUILD_DIR";
 
-	if [ ! -e "$CURL_BUILDDIR/$CURL_NAME" ]; then
+	if [ ! -e "$BUILD_DIR/$CURL_NAME" ]; then
 		tar xf "$TARBALL_DIR/$CURL_TARBALL";
 	fi
 	loginfo "$CURL_TARBALL has been unpacked."
-	cd "$CURL_BUILDDIR/$CURL_NAME";
+	cd "$BUILD_DIR/$CURL_NAME";
 	./configure --prefix=$OUTPUT_DIR \
 		--with-ssl=$OUTPUT_DIR \
 		--enable-static \
@@ -72,8 +72,7 @@ main_run()
 			;;
 	esac
 
-	CURL_BUILDDIR="$BUILD_DIR/curl";
-
+	source "$SCRIPT_DIR/tarball-config.sh";
 	download_tarball;
 
 	build_curl $CONFIG_PARAM;
