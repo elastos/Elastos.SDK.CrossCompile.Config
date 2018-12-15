@@ -7,8 +7,8 @@ download_tarball()
 {
 	if [ ! -e "$TARBALL_DIR/.$ELASTOS_ORG_WALLET_LIB_C_NAME" ]; then
 		local url="$ELASTOS_ORG_WALLET_LIB_C_BASE_URL/$ELASTOS_ORG_WALLET_LIB_C_TARBALL";
-		echo curl "$url" --output "$TARBALL_DIR/${ELASTOS_ORG_WALLET_LIB_C_TARBALL//\//-}";
-		curl "$url" --location --output "$TARBALL_DIR/${ELASTOS_ORG_WALLET_LIB_C_TARBALL//\//-}";
+		echo git clone "$url" "$TARBALL_DIR/$ELASTOS_ORG_WALLET_LIB_C_NAME";
+		git clone --depth=1 "$url" "$TARBALL_DIR/$ELASTOS_ORG_WALLET_LIB_C_NAME";
 		echo "$url" > "$TARBALL_DIR/.$ELASTOS_ORG_WALLET_LIB_C_NAME";
 	fi
 
@@ -21,7 +21,7 @@ build_tarball()
 	loginfo "change directory to $BUILD_DIR";
 
 	if [ ! -e "$BUILD_DIR/$ELASTOS_ORG_WALLET_LIB_C_NAME" ]; then
-		unzip "$TARBALL_DIR/${ELASTOS_ORG_WALLET_LIB_C_TARBALL//\//-}";
+		cp -r "$TARBALL_DIR/$ELASTOS_ORG_WALLET_LIB_C_NAME" "$BUILD_DIR/$ELASTOS_ORG_WALLET_LIB_C_NAME";
 	fi
 	loginfo "${ELASTOS_ORG_WALLET_LIB_C_TARBALL//\//-} has been unpacked."
 	cd "$BUILD_DIR/$ELASTOS_ORG_WALLET_LIB_C_NAME";
