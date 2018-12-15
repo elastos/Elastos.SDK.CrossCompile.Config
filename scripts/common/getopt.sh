@@ -115,7 +115,7 @@ getopt_print_input_log()
 
 CURRENT_DIR=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd);
 SCRIPT_DIR=$(dirname "$CURRENT_DIR");
-source "$SCRIPT_DIR/build-common/base.sh";
+source "$SCRIPT_DIR/common/base.sh";
 
 CFG_TARGET_PLATFORM=$(uname -s);
 CFG_TARGET_ABI=;

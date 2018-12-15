@@ -108,7 +108,7 @@ main_run()
 }
 
 SCRIPT_DIR=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd);
-source "$SCRIPT_DIR/build-common/base.sh";
+source "$SCRIPT_DIR/common/base.sh";
 PROJECT_NAME="Elastos.SDK.Wallet.C"
 PACKAGE_DIR="$BUILD_BASE_DIR/package";
 

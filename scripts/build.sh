@@ -78,20 +78,23 @@ main_run()
 	# build dependencies first.
 	if [[ $CFG_WITHOUT_DEPENDS == false ]]; then
 		export GETOPT_IGNORE_UNRECOGNIZED=true;
-		"$SCRIPT_DIR/build-curl.sh" $@;
-		"$SCRIPT_DIR/build-sqlite.sh" $@;
+		if [ "$(type -t build_extfunc_depends)" == "function" ]; then
+			build_extfunc_depends $@;
+		else
+			loginfo "Function build_extfunc_depends() is not defined.";
+		fi
 		export GETOPT_IGNORE_UNRECOGNIZED=false;
 	fi
 
 	case "$CFG_TARGET_PLATFORM" in
 		(Android)
-			source "$SCRIPT_DIR/build-common/setenv-android.sh";
+			source "$SCRIPT_DIR/common/setenv-android.sh";
 			;;
 		(iOS)
-			source "$SCRIPT_DIR/build-common/setenv-ios.sh";
+			source "$SCRIPT_DIR/common/setenv-ios.sh";
 			;;
 		(*)
-			source "$SCRIPT_DIR/build-common/setenv-unixlike.sh";
+			source "$SCRIPT_DIR/common/setenv-unixlike.sh";
 			;;
 	esac
 
@@ -104,7 +107,7 @@ main_run()
 }
 
 SCRIPT_DIR=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd);
-source "$SCRIPT_DIR/build-common/getopt.sh";
+source "$SCRIPT_DIR/common/getopt.sh";
 
 CFG_ENABLE_SHARED_LIB=ON;
 CFG_WITHOUT_DEPENDS=false;

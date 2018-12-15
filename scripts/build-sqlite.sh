@@ -41,17 +41,15 @@ main_run()
 	loginfo "parsing options";
 	getopt_parse_options $@;
 
+	source "$SCRIPT_DIR/common/setenv.sh";
 	case "$CFG_TARGET_PLATFORM" in
 		(Android)
-			source "$SCRIPT_DIR/build-common/setenv-android.sh";
 			CONFIG_PARAM="--host=$ANDROID_TOOLCHAIN --target=$ANDROID_TOOLCHAIN";
 			;;
 		(iOS)
-			source "$SCRIPT_DIR/build-common/setenv-ios.sh";
 			CONFIG_PARAM="--host=$IOS_TOOLCHAIN --target=$IOS_TOOLCHAIN";
 			;;
 		(*)
-			source "$SCRIPT_DIR/build-common/setenv-unixlike.sh";
 			CONFIG_PARAM=;
 			;;
 	esac
@@ -67,6 +65,6 @@ main_run()
 
 SCRIPT_DIR=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd);
 
-source "$SCRIPT_DIR/build-common/getopt.sh";
+source "$SCRIPT_DIR/common/getopt.sh";
 
 main_run $@;

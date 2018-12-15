@@ -41,22 +41,19 @@ main_run()
 	loginfo "parsing options";
 	getopt_parse_options $@;
 
+	source "$SCRIPT_DIR/common/setenv.sh";
 	case "$CFG_TARGET_PLATFORM" in
 		(Android)
-			source "$SCRIPT_DIR/build-common/setenv-android.sh";
 			export ANDROID_NDK="$ANDROID_TOOLCHAIN_PATH";
 			local arch=${CFG_TARGET_ABI%-*};
 			arch=${arch%eabi};
 			CONFIG_PARAM="./Configure android-$arch";
 			;;
 		(iOS)
-			source "$SCRIPT_DIR/build-common/setenv-ios.sh";
 			[[ "$CFG_TARGET_ABI" = "x86_64" ]] && arch="iossimulator" || arch="ios64"
 			CONFIG_PARAM="./Configure $arch-xcrun"
-
 			;;
 		(*)
-			source "$SCRIPT_DIR/build-common/setenv-unixlike.sh";
 			CONFIG_PARAM="./config";
 			;;
 	esac
@@ -72,6 +69,6 @@ main_run()
 
 SCRIPT_DIR=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd);
 
-source "$SCRIPT_DIR/build-common/getopt.sh";
+source "$SCRIPT_DIR/common/getopt.sh";
 
 main_run $@;
