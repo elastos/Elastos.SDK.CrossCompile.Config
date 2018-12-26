@@ -101,9 +101,10 @@ OPTIONS
 
        -m, --arch=(ARCH)
                  Optional. target platform abi.
-                 For native compile, use [x86_64] as default.
-                 For Android, use [armeabi-v7a] as default.
-                 For iOS, use [arm64] as default.';
+                 For native compile, valid value is (x86_64), use [x86_64] as default.
+                 For Android, valid value is (armeabi-v7a, arm64-v8a, x86_64), use [armeabi-v7a] as default.
+                 For iOS, valid value is (arm64, x86_64), use [arm64] as default.';
+
 	type getopt_extfunc_usage &>/dev/null && getopt_extfunc_usage;
 	echo '
        -h, --help

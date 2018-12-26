@@ -16,6 +16,10 @@ build_all()
 
 	for pidx in "${!target_platforms[@]}"; do
 		local platform="${target_platforms[pidx]}";
+		if [[ ! "$platform" =~ $PACKAGE_PLATFORM ]]; then
+			echo "Ignore to build for $platform.";
+			continue;
+		fi
 
 		for (( tidx = 0; tidx < $target_abi_type; tidx++)); do
 			local aidx=$((${target_abi_type} * ${pidx} + ${tidx}));
@@ -101,19 +105,25 @@ package_ios()
 
 main_run()
 {
+	echo "Appoint to build for $PACKAGE_PLATFORM";
 	build_all;
 
 	loginfo "Remove previous packages in $PACKAGE_DIR";
 	rm -rf "$PACKAGE_DIR";
 
-	package_android;
+	if [[ "Android" =~ $PACKAGE_PLATFORM ]]; then
+		package_android;
+	fi
 
-	package_ios;
+	if [[ "iOS" =~ $PACKAGE_PLATFORM ]]; then
+		package_ios;
+	fi
 }
 
 SCRIPT_DIR=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd);
 source "$SCRIPT_DIR/common/base.sh";
 PROJECT_NAME=${CFG_PROJECT_NAME:="Unknown"}
 PACKAGE_DIR="$BUILD_BASE_DIR/package";
+PACKAGE_PLATFORM=${PACKAGE_PLATFORM:=".*"}
 
 main_run $@;
