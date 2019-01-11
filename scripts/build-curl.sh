@@ -42,6 +42,8 @@ build_curl()
 		--disable-smtp \
 		--disable-telnet \
 		--disable-tftp \
+		--disable-ldap \
+		--without-libidn2 \
 		$@
 
 	make -j$MAX_JOBS -C lib libcurl.la V=1 && \

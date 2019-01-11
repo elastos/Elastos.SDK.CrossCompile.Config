@@ -98,7 +98,6 @@ main_run()
 			;;
 	esac
 
-	PROJECT_NAME="Elastos.SDK.Wallet.C";
 	PROJECT_BUILDDIR="$BUILD_DIR/$PROJECT_NAME";
 
 	build_project $@;
@@ -113,5 +112,6 @@ CFG_ENABLE_SHARED_LIB=ON;
 CFG_WITHOUT_DEPENDS=false;
 CFG_WITH_TEST=false;
 CFG_IGNORE_BUILD=false;
+PROJECT_NAME=${CFG_PROJECT_NAME:="Unknown"}
 
 main_run $@;
