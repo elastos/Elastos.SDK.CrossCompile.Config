@@ -3,7 +3,7 @@ set -o errexit
 set -o nounset
 
 CURL_BASE_URL="https://curl.haxx.se/download";
-CURL_VERSION="7.62.0";
+CURL_VERSION="7.63.0";
 CURL_NAME="curl-$CURL_VERSION";
 CURL_TARBALL="$CURL_NAME.tar.gz";
 

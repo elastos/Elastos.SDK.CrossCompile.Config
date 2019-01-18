@@ -32,9 +32,10 @@ done
 ARCH=${ARCH_LIST[$LIST_IDX]}
 SYSROOT="$XCODE/Platforms/${PLATFORM_LIST[$LIST_IDX]}.platform/Developer/SDKs/${SDK_LIST[$LIST_IDX]}.sdk"
 export CFLAGS="-arch ${ARCH_LIST[$LIST_IDX]} -pipe -Os -gdwarf-2 -isysroot $SYSROOT -miphoneos-version-min=${IPHONEOS_DEPLOYMENT_TARGET} -fembed-bitcode -Werror=partial-availability"
+export CPPFLAGS="$CFLAGS"
 export LDFLAGS="-arch ${ARCH_LIST[$LIST_IDX]} -isysroot $SYSROOT"
 if [ "${PLATFORM_LIST[$LIST_IDX]}" = "iPhoneSimulator" ]; then
-	export CPPFLAGS="-D__IPHONE_OS_VERSION_MIN_REQUIRED=${IPHONEOS_DEPLOYMENT_TARGET%%.*}0000"
+	export CPPFLAGS+=" -D__IPHONE_OS_VERSION_MIN_REQUIRED=${IPHONEOS_DEPLOYMENT_TARGET%%.*}0000"
 fi
 
 IOS_TOOLCHAIN=${TOOLCHAIN_LIST[$LIST_IDX]};
