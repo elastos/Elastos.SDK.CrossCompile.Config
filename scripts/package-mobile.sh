@@ -65,7 +65,7 @@ package_android()
 		cp -rv "$BUILD_ROOT_DIR/Android/$abi/include/$PROJECT_NAME/"* "$pkg_android_dir/jni/include/";
 	done
 
-	local package_name="org.elastos.sdk.wallet.c";
+	local package_name="org.elastos.sdk.keypair.c";
 	make_android_manifest "$package_name" "$pkg_android_dir/AndroidManifest.xml";
 
 	cd "$pkg_android_dir";
