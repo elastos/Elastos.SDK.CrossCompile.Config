@@ -10,6 +10,11 @@ download_tarball()
 		echo git clone "$url" "$TARBALL_DIR/$ELASTOS_SDK_KEYPAIR_C_NAME";
 		git clone --depth=1 "$url" "$TARBALL_DIR/$ELASTOS_SDK_KEYPAIR_C_NAME";
 		echo "$url" > "$TARBALL_DIR/.$ELASTOS_SDK_KEYPAIR_C_NAME";
+
+		echo get submodules;
+        cd "$TARBALL_DIR/$ELASTOS_SDK_KEYPAIR_C_NAME";
+        git submodule init;
+        git submodule update;
 	fi
 
 	loginfo "$ELASTOS_SDK_KEYPAIR_C_TARBALL has been downloaded."
