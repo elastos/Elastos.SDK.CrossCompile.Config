@@ -25,26 +25,31 @@ build_curl()
 	fi
 	loginfo "$CURL_TARBALL has been unpacked."
 	cd "$BUILD_DIR/$CURL_NAME";
-	./configure --prefix=$OUTPUT_DIR \
-		--with-ssl=$OUTPUT_DIR \
-		--enable-static \
-		--disable-shared \
-		--disable-verbose \
-		--enable-threaded-resolver \
-		--enable-ipv6 \
-		--disable-dict \
-		--disable-ftp \
-		--disable-gopher \
-		--disable-imap \
-		--disable-pop3 \
-		--disable-rtsp \
-		--disable-smb \
-		--disable-smtp \
-		--disable-telnet \
-		--disable-tftp \
-		--disable-ldap \
-		--without-libidn2 \
-		$@
+
+	if [ ! -e ".configured" ]; then
+        ./configure --prefix=$OUTPUT_DIR \
+            --with-ssl=$OUTPUT_DIR \
+            --enable-static \
+            --disable-shared \
+            --disable-verbose \
+            --enable-threaded-resolver \
+            --enable-ipv6 \
+            --disable-dict \
+            --disable-ftp \
+            --disable-gopher \
+            --disable-imap \
+            --disable-pop3 \
+            --disable-rtsp \
+            --disable-smb \
+            --disable-smtp \
+            --disable-telnet \
+            --disable-tftp \
+            --disable-ldap \
+            --without-libidn2 \
+            $@
+        touch ".configured";
+    fi
+	loginfo "$CURL_TARBALL has been configured."
 
 	make -j$MAX_JOBS -C lib libcurl.la V=1 && \
 	make -C lib install-libLTLIBRARIES && \

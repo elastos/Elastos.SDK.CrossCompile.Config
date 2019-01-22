@@ -25,12 +25,17 @@ build_openssl()
 	fi
 	loginfo "$OPENSSL_TARBALL has been unpacked."
 	cd "$BUILD_DIR/$OPENSSL_NAME";
-	$@ --prefix=$OUTPUT_DIR \
-		no-asm \
-		no-shared \
-		no-cast \
-		no-idea \
-		no-camellia;
+
+	if [ ! -e ".configured" ]; then
+        $@ --prefix=$OUTPUT_DIR \
+            no-asm \
+            no-shared \
+            no-cast \
+            no-idea \
+            no-camellia;
+        touch ".configured";
+    fi
+	loginfo "$OPENSSL_TARBALL has been configured."
 
 	#make -j$MAX_JOBS && make install_engine
 	make install_dev

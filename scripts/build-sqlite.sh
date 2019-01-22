@@ -26,12 +26,16 @@ build_sqlite()
 	loginfo "$SQLITE_TARBALL has been unpacked."
 	cd "$BUILD_DIR/$SQLITE_NAME";
 
-	#export CFLAGS="-DSQLITE_NOHAVE_SYSTEM"
-	./configure --prefix=$OUTPUT_DIR \
-		--enable-static \
-		--disable-shared \
-		--disable-static-shell \
-		$@
+	if [ ! -e ".configured" ]; then
+        #export CFLAGS="-DSQLITE_NOHAVE_SYSTEM"
+        ./configure --prefix=$OUTPUT_DIR \
+            --enable-static \
+            --disable-shared \
+            --disable-static-shell \
+            $@
+        touch ".configured";
+    fi
+	loginfo "$SQLITE_TARBALL has been configured."
 
 	make -j$MAX_JOBS libsqlite3.la && make install-libLTLIBRARIES install-includeHEADERS install-pkgconfigDATA
 }
