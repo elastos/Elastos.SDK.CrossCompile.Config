@@ -22,3 +22,5 @@ echo "===================================";
 
 export CC=clang
 export CXX=clang++
+export CFLAGS="-fPIC"
+export CXXFLAGS="-fPIC"
