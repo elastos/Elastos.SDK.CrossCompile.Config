@@ -7,7 +7,7 @@ set(CMAKE_SYSTEM_NAME Android)
 
 #choose Android version. This is not the version of Cmake.
 if("${CFG_TARGET_ABI}" STREQUAL "armeabi-v7a")
-	set(CMAKE_SYSTEM_VERSION 19)
+	set(CMAKE_SYSTEM_VERSION 16)
 elseif("${CFG_TARGET_ABI}" STREQUAL "arme64-v8a")
 	set(CMAKE_SYSTEM_VERSION 21)
 else()

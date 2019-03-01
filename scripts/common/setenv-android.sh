@@ -20,7 +20,7 @@ if [[ "$ANDROID_NDK_HOME" == .* ]]; then
 	exit 1
 fi
 
-SDK_LIST=(19 21 21)
+SDK_LIST=(16 21 21)
 ARCH_LIST=(arm arm64 x86_64)
 TOOLCHAIN_LIST=(arm-linux-androideabi aarch64-linux-android x86_64-linux-android)
 for idx in "${!SYSTEM_ABIS[@]}"; do

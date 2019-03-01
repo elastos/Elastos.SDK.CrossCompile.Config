@@ -47,7 +47,7 @@ make_android_manifest()
 	echo '<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="'$package_name'">
-    <uses-sdk android:minSdkVersion="19" android:targetSdkVersion="21"/>
+    <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="21"/>
 </manifest>' \
 	> "$manifest_xml";
 }
