@@ -49,8 +49,8 @@ export CFG_ANDROID_TOOLCHAIN_PATH
 export PATH="$CFG_ANDROID_TOOLCHAIN_PATH/bin:$PATH"
 export CC=clang
 export CXX=clang++
-export CFLAGS="-D__ANDROID_API__=$CFG_ANDROID_SDK"
-export CPPFLAGS="-D__ANDROID_API__=$CFG_ANDROID_SDK"
+export CFLAGS="-D__ANDROID_API__=$CFG_ANDROID_SDK -fPIC"
+export CPPFLAGS="-D__ANDROID_API__=$CFG_ANDROID_SDK -fPIC"
 
 echo "===================================";
 echo "ARCH:       ${ARCH_LIST[$LIST_IDX]}";
