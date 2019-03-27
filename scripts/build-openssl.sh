@@ -49,7 +49,7 @@ main_run()
 	source "$SCRIPT_DIR/common/setenv.sh";
 	case "$CFG_TARGET_PLATFORM" in
 		(Android)
-			export ANDROID_NDK="$ANDROID_TOOLCHAIN_PATH";
+			export ANDROID_NDK="$CFG_ANDROID_TOOLCHAIN_PATH";
 			local arch=${CFG_TARGET_ABI%-*};
 			arch=${arch%eabi};
 			CONFIG_PARAM="./Configure android-$arch";

@@ -31,28 +31,29 @@ for idx in "${!SYSTEM_ABIS[@]}"; do
 done
 
 #Configure toolchain
-ANDROID_SDK=${SDK_LIST[$LIST_IDX]};
+CFG_ANDROID_SDK=${SDK_LIST[$LIST_IDX]};
 ANDROID_TOOLCHAIN=${TOOLCHAIN_LIST[$LIST_IDX]};
-ANDROID_TOOLCHAIN_PATH="$BUILD_DIR/toolchain";
+CFG_ANDROID_TOOLCHAIN_PATH="$BUILD_DIR/toolchain";
 if [ ! -e "$BUILD_DIR/.toolchain" ]; then
-	rm -rf "$ANDROID_TOOLCHAIN_PATH"
+	rm -rf "$CFG_ANDROID_TOOLCHAIN_PATH"
 	$ANDROID_NDK_HOME/build/tools/make-standalone-toolchain.sh \
 		--arch=${ARCH_LIST[$LIST_IDX]} \
-		--platform=android-${ANDROID_SDK} \
+		--platform=android-${CFG_ANDROID_SDK} \
 		--toolchain=${ANDROID_TOOLCHAIN}-clang \
-		--stl=libc++ --install-dir="$ANDROID_TOOLCHAIN_PATH";
+		--stl=libc++ --install-dir="$CFG_ANDROID_TOOLCHAIN_PATH";
 
 	touch "$BUILD_DIR/.toolchain";
 fi
 
-export PATH="$ANDROID_TOOLCHAIN_PATH/bin:$PATH"
+export CFG_ANDROID_TOOLCHAIN_PATH
+export PATH="$CFG_ANDROID_TOOLCHAIN_PATH/bin:$PATH"
 export CC=clang
 export CXX=clang++
-export CFLAGS="-D__ANDROID_API__=$ANDROID_SDK"
-export CPPFLAGS="-D__ANDROID_API__=$ANDROID_SDK"
+export CFLAGS="-D__ANDROID_API__=$CFG_ANDROID_SDK"
+export CPPFLAGS="-D__ANDROID_API__=$CFG_ANDROID_SDK"
 
 echo "===================================";
 echo "ARCH:       ${ARCH_LIST[$LIST_IDX]}";
-echo "SDK:        ${ANDROID_SDK}";
+echo "SDK:        ${CFG_ANDROID_SDK}";
 echo "TOOLCHAIN:  ${ANDROID_TOOLCHAIN}";
 echo "===================================";

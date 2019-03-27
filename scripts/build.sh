@@ -62,6 +62,8 @@ build_project()
         cmake "$PROJECT_DIR" \
             -DCMAKE_INSTALL_PREFIX="$OUTPUT_DIR" \
             -DBUILD_SHARED_LIBS=$CFG_ENABLE_SHARED_LIB \
+            -DCFG_ANDROID_TOOLCHAIN_PATH=$CFG_ANDROID_TOOLCHAIN_PATH \
+            -DCFG_ANDROID_SDK=$CFG_ANDROID_SDK \
             -DCFG_TARGET_PLATFORM=$CFG_TARGET_PLATFORM \
             -DCFG_TARGET_ABI=$CFG_TARGET_ABI \
             $cmake_ext_args;
@@ -70,6 +72,7 @@ build_project()
 	loginfo "$PROJECT_NAME has been configured."
 
 	if [[ $CFG_IGNORE_BUILD == false ]]; then
+		#make -j$MAX_JOBS VERBOSE=1 && make install;
 		make -j$MAX_JOBS && make install;
 	fi
 }
