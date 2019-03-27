@@ -39,7 +39,7 @@ if [ ! -e "$BUILD_DIR/.toolchain" ]; then
 	$ANDROID_NDK_HOME/build/tools/make-standalone-toolchain.sh \
 		--arch=${ARCH_LIST[$LIST_IDX]} \
 		--platform=android-${ANDROID_SDK} \
-		--toolchain=${ANDROID_TOOLCHAIN}-clang3.6 \
+		--toolchain=${ANDROID_TOOLCHAIN}-clang \
 		--stl=libc++ --install-dir="$ANDROID_TOOLCHAIN_PATH";
 
 	touch "$BUILD_DIR/.toolchain";
