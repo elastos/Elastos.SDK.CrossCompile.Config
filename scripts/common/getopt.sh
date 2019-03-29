@@ -15,7 +15,8 @@ getopt_parse_options()
 	getopt_ext=([0]= [1]=);
 	type getopt_extfunc_options &>/dev/null && local ret=$(getopt_extfunc_options) && getopt_ext=(${ret//;/ });
 
-	local args="--name getopt-script --options p:f:m:${getopt_ext[0]}h --longoptions prefix:,platform:,arch:,${getopt_ext[1]},help";
+	local args="--name getopt-script --options p:f:m:${getopt_ext[0]}ch \
+                --longoptions prefix:,platform:,arch:,${getopt_ext[1]},clean,help";
 	#echo "getopt args: $args";
 
 	if [[ $GETOPT_IGNORE_UNRECOGNIZED  == true ]]; then
@@ -42,6 +43,10 @@ getopt_parse_options()
 			(-m | --arch)
 				CFG_TARGET_ABI=$2;
 				shift 2;
+				;;
+			(-c | --clean)
+				getopt_clean;
+				exit 0;
 				;;
 			(-h | --help)
 				getopt_print_usage;
@@ -80,6 +85,14 @@ getopt_parse_options()
 	getopt_print_input_log;
 }
 
+getopt_clean()
+{
+    local tarball_name=$(basename "$BUILD_TARBALL_DIR");
+
+    echo "cleaning $BUILD_BASE_DIR";
+    cd "$BUILD_BASE_DIR" && ls |grep -v "$tarball_name" |xargs rm -r;
+}
+
 getopt_print_usage()
 {
 	echo '
@@ -107,6 +120,9 @@ OPTIONS
 
 	type getopt_extfunc_usage &>/dev/null && getopt_extfunc_usage;
 	echo '
+       -c, --clean
+                 Optional. clean build files.
+
        -h, --help
                  Optional. Print help infomation and exit successfully.';
 }

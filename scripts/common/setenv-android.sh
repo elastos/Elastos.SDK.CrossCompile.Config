@@ -6,9 +6,7 @@ source "$CURRENT_DIR/base.sh";
 SYSTEM_NAME="Android"
 SYSTEM_ABIS=(armeabi-v7a arm64-v8a x86_64)
 BUILD_DIR="$BUILD_BASE_DIR/$SYSTEM_NAME/$CFG_TARGET_ABI";
-TARBALL_DIR="$BUILD_BASE_DIR/tarball";
 OUTPUT_DIR="$BUILD_ROOT_DIR/$SYSTEM_NAME/$CFG_TARGET_ABI";
-mkdir -p "$TARBALL_DIR";
 
 if [ -z "$ANDROID_NDK_HOME" ]; then
 	echo "Please set your ANDROID_NDK_HOME environment variable first"

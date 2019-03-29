@@ -54,6 +54,10 @@ build_project()
 	if [[ $CFG_WITH_TEST == true ]]; then
 		cmake_ext_args+=" -DCFG_WITH_TEST=";
 	fi
+	if [[ $CFG_TARGET_PLATFORM == "Android" ]]; then
+		cmake_ext_args+=" -DCFG_ANDROID_TOOLCHAIN_PATH=$CFG_ANDROID_TOOLCHAIN_PATH";
+        cmake_ext_args+=" -DCFG_ANDROID_SDK=$CFG_ANDROID_SDK";
+	fi
 	echo $cmake_ext_args;
 
 	cd "$PROJECT_BUILDDIR";
@@ -62,8 +66,6 @@ build_project()
         cmake "$PROJECT_DIR" \
             -DCMAKE_INSTALL_PREFIX="$OUTPUT_DIR" \
             -DBUILD_SHARED_LIBS=$CFG_ENABLE_SHARED_LIB \
-            -DCFG_ANDROID_TOOLCHAIN_PATH=$CFG_ANDROID_TOOLCHAIN_PATH \
-            -DCFG_ANDROID_SDK=$CFG_ANDROID_SDK \
             -DCFG_TARGET_PLATFORM=$CFG_TARGET_PLATFORM \
             -DCFG_TARGET_ABI=$CFG_TARGET_ABI \
             $cmake_ext_args;

@@ -5,11 +5,11 @@ set -o nounset
 
 download_tarball()
 {
-	if [ ! -e "$TARBALL_DIR/.$CURL_NAME" ]; then
+	if [ ! -e "$BUILD_TARBALL_DIR/.$CURL_NAME" ]; then
 		curl_url="$CURL_BASE_URL/$CURL_TARBALL";
-		echo curl "$curl_url" --output "$TARBALL_DIR/$CURL_TARBALL";
-		curl "$curl_url" --output "$TARBALL_DIR/$CURL_TARBALL";
-		echo "$curl_url" > "$TARBALL_DIR/.$CURL_NAME";
+		echo curl "$curl_url" --output "$BUILD_TARBALL_DIR/$CURL_TARBALL";
+		curl "$curl_url" --output "$BUILD_TARBALL_DIR/$CURL_TARBALL";
+		echo "$curl_url" > "$BUILD_TARBALL_DIR/.$CURL_NAME";
 	fi
 
 	loginfo "$CURL_TARBALL has been downloaded."
@@ -21,7 +21,7 @@ build_curl()
 	loginfo "change directory to $BUILD_DIR";
 
 	if [ ! -e "$BUILD_DIR/$CURL_NAME" ]; then
-		tar xf "$TARBALL_DIR/$CURL_TARBALL";
+		tar xf "$BUILD_TARBALL_DIR/$CURL_TARBALL";
 	fi
 	loginfo "$CURL_TARBALL has been unpacked."
 	cd "$BUILD_DIR/$CURL_NAME";

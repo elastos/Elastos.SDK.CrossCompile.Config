@@ -6,9 +6,7 @@ source "$CURRENT_DIR/base.sh";
 SYSTEM_NAME="iOS"
 SYSTEM_ABIS=(arm64 x86_64)
 BUILD_DIR="$BUILD_BASE_DIR/$SYSTEM_NAME/$CFG_TARGET_ABI";
-TARBALL_DIR="$BUILD_BASE_DIR/tarball";
 OUTPUT_DIR="$BUILD_ROOT_DIR/$SYSTEM_NAME/$CFG_TARGET_ABI";
-mkdir -p "$TARBALL_DIR";
 
 XCODE="/Applications/Xcode.app/Contents/Developer"
 if [ ! -d "$XCODE" ]; then

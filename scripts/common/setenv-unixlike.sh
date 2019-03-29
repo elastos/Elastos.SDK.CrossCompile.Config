@@ -6,9 +6,7 @@ source "$CURRENT_DIR/base.sh";
 SYSTEM_NAME=$(uname -s)
 SYSTEM_ABIS=(x86_64)
 BUILD_DIR="$BUILD_BASE_DIR/$SYSTEM_NAME/$CFG_TARGET_ABI";
-TARBALL_DIR="$BUILD_BASE_DIR/tarball";
 OUTPUT_DIR="$BUILD_ROOT_DIR/$SYSTEM_NAME/$CFG_TARGET_ABI";
-mkdir -p "$TARBALL_DIR";
 
 if [ -z $(which clang) ]; then
 	echo "You have to install clang first"

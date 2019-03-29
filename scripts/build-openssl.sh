@@ -5,11 +5,11 @@ set -o nounset
 
 download_tarball()
 {
-	if [ ! -e "$TARBALL_DIR/.$OPENSSL_NAME" ]; then
+	if [ ! -e "$BUILD_TARBALL_DIR/.$OPENSSL_NAME" ]; then
 		openssl_url="$OPENSSL_BASE_URL/$OPENSSL_TARBALL";
-		echo curl "$openssl_url" --output "$TARBALL_DIR/$OPENSSL_TARBALL";
-		curl "$openssl_url" --output "$TARBALL_DIR/$OPENSSL_TARBALL";
-		echo "$openssl_url" > "$TARBALL_DIR/.$OPENSSL_NAME";
+		echo curl "$openssl_url" --output "$BUILD_TARBALL_DIR/$OPENSSL_TARBALL";
+		curl "$openssl_url" --output "$BUILD_TARBALL_DIR/$OPENSSL_TARBALL";
+		echo "$openssl_url" > "$BUILD_TARBALL_DIR/.$OPENSSL_NAME";
 	fi
 
 	loginfo "$OPENSSL_TARBALL has been downloaded."
@@ -21,7 +21,7 @@ build_openssl()
 	loginfo "change directory to $BUILD_DIR";
 
 	if [ ! -e "$BUILD_DIR/$OPENSSL_NAME" ]; then
-		tar xf "$TARBALL_DIR/$OPENSSL_TARBALL";
+		tar xf "$BUILD_TARBALL_DIR/$OPENSSL_TARBALL";
 	fi
 	loginfo "$OPENSSL_TARBALL has been unpacked."
 	cd "$BUILD_DIR/$OPENSSL_NAME";

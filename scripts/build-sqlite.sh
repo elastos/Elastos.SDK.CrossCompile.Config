@@ -5,11 +5,11 @@ set -o nounset
 
 download_tarball()
 {
-	if [ ! -e "$TARBALL_DIR/.$SQLITE_NAME" ]; then
+	if [ ! -e "$BUILD_TARBALL_DIR/.$SQLITE_NAME" ]; then
 		sqlite_url="$SQLITE_BASE_URL/$SQLITE_TARBALL";
-		echo curl "$sqlite_url" --output "$TARBALL_DIR/$SQLITE_TARBALL";
-		curl "$sqlite_url" --output "$TARBALL_DIR/$SQLITE_TARBALL";
-		echo "$sqlite_url" > "$TARBALL_DIR/.$SQLITE_NAME";
+		echo curl "$sqlite_url" --output "$BUILD_TARBALL_DIR/$SQLITE_TARBALL";
+		curl "$sqlite_url" --output "$BUILD_TARBALL_DIR/$SQLITE_TARBALL";
+		echo "$sqlite_url" > "$BUILD_TARBALL_DIR/.$SQLITE_NAME";
 	fi
 
 	loginfo "$SQLITE_TARBALL has been downloaded."
@@ -21,7 +21,7 @@ build_sqlite()
 	loginfo "change directory to $BUILD_DIR";
 
 	if [ ! -e "$BUILD_DIR/$SQLITE_NAME" ]; then
-		tar xf "$TARBALL_DIR/$SQLITE_TARBALL";
+		tar xf "$BUILD_TARBALL_DIR/$SQLITE_TARBALL";
 	fi
 	loginfo "$SQLITE_TARBALL has been unpacked."
 	cd "$BUILD_DIR/$SQLITE_NAME";
