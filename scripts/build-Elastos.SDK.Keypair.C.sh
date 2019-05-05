@@ -3,23 +3,6 @@
 set -o errexit
 set -o nounset
 
-download_tarball()
-{
-	if [ ! -e "$BUILD_TARBALL_DIR/.$ELASTOS_SDK_KEYPAIR_C_NAME" ]; then
-		local url="$ELASTOS_SDK_KEYPAIR_C_BASE_URL/$ELASTOS_SDK_KEYPAIR_C_TARBALL";
-		echo git clone "$url" "$BUILD_TARBALL_DIR/$ELASTOS_SDK_KEYPAIR_C_NAME";
-		git clone --depth=1 "$url" "$BUILD_TARBALL_DIR/$ELASTOS_SDK_KEYPAIR_C_NAME";
-		echo "$url" > "$BUILD_TARBALL_DIR/.$ELASTOS_SDK_KEYPAIR_C_NAME";
-
-		echo get submodules;
-        cd "$BUILD_TARBALL_DIR/$ELASTOS_SDK_KEYPAIR_C_NAME";
-        git submodule init;
-        git submodule update;
-	fi
-
-	loginfo "$ELASTOS_SDK_KEYPAIR_C_TARBALL has been downloaded."
-}
-
 build_tarball()
 {
 	mkdir -p "$BUILD_DIR" && cd "$BUILD_DIR";
@@ -46,7 +29,10 @@ main_run()
 	source "$SCRIPT_DIR/common/setenv.sh";
 
 	source "$SCRIPT_DIR/tarball-config.sh";
-	download_tarball;
+    source "$SCRIPT_DIR/common/download-tarball.sh";
+    local tarball_url="$ELASTOS_SDK_KEYPAIR_C_BASE_URL/$ELASTOS_SDK_KEYPAIR_C_TARBALL";
+    local tarball_path="$BUILD_TARBALL_DIR/$ELASTOS_SDK_KEYPAIR_C_NAME";
+	clone_from_github "$tarball_url" "$tarball_path";
 
 	build_tarball $@;
 

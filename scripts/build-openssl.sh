@@ -3,18 +3,6 @@
 set -o errexit
 set -o nounset
 
-download_tarball()
-{
-	if [ ! -e "$BUILD_TARBALL_DIR/.$OPENSSL_NAME" ]; then
-		openssl_url="$OPENSSL_BASE_URL/$OPENSSL_TARBALL";
-		echo curl "$openssl_url" --output "$BUILD_TARBALL_DIR/$OPENSSL_TARBALL";
-		curl "$openssl_url" --output "$BUILD_TARBALL_DIR/$OPENSSL_TARBALL";
-		echo "$openssl_url" > "$BUILD_TARBALL_DIR/.$OPENSSL_NAME";
-	fi
-
-	loginfo "$OPENSSL_TARBALL has been downloaded."
-}
-
 build_openssl()
 {
 	mkdir -p "$BUILD_DIR" && cd "$BUILD_DIR";
@@ -64,7 +52,10 @@ main_run()
 	esac
 
 	source "$SCRIPT_DIR/tarball-config.sh";
-	download_tarball;
+    source "$SCRIPT_DIR/common/download-tarball.sh";
+    local tarball_url="$OPENSSL_BASE_URL/$OPENSSL_TARBALL";
+    local tarball_path="$BUILD_TARBALL_DIR/$OPENSSL_TARBALL";
+	download_tarball "$tarball_url" "$tarball_path";
 
 	build_openssl $CONFIG_PARAM;
 

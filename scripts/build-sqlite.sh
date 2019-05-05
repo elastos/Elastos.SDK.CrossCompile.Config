@@ -3,18 +3,6 @@
 set -o errexit
 set -o nounset
 
-download_tarball()
-{
-	if [ ! -e "$BUILD_TARBALL_DIR/.$SQLITE_NAME" ]; then
-		sqlite_url="$SQLITE_BASE_URL/$SQLITE_TARBALL";
-		echo curl "$sqlite_url" --output "$BUILD_TARBALL_DIR/$SQLITE_TARBALL";
-		curl "$sqlite_url" --output "$BUILD_TARBALL_DIR/$SQLITE_TARBALL";
-		echo "$sqlite_url" > "$BUILD_TARBALL_DIR/.$SQLITE_NAME";
-	fi
-
-	loginfo "$SQLITE_TARBALL has been downloaded."
-}
-
 build_sqlite()
 {
 	mkdir -p "$BUILD_DIR" && cd "$BUILD_DIR";
@@ -59,7 +47,10 @@ main_run()
 	esac
 
 	source "$SCRIPT_DIR/tarball-config.sh";
-	download_tarball;
+    source "$SCRIPT_DIR/common/download-tarball.sh";
+    local tarball_url="$SQLITE_BASE_URL/$SQLITE_TARBALL";
+    local tarball_path="$BUILD_TARBALL_DIR/$SQLITE_TARBALL";
+	download_tarball "$tarball_url" "$tarball_path";
 
 	build_sqlite $CONFIG_PARAM;
 

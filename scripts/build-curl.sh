@@ -3,18 +3,6 @@
 set -o errexit
 set -o nounset
 
-download_tarball()
-{
-	if [ ! -e "$BUILD_TARBALL_DIR/.$CURL_NAME" ]; then
-		curl_url="$CURL_BASE_URL/$CURL_TARBALL";
-		echo curl "$curl_url" --output "$BUILD_TARBALL_DIR/$CURL_TARBALL";
-		curl "$curl_url" --output "$BUILD_TARBALL_DIR/$CURL_TARBALL";
-		echo "$curl_url" > "$BUILD_TARBALL_DIR/.$CURL_NAME";
-	fi
-
-	loginfo "$CURL_TARBALL has been downloaded."
-}
-
 build_curl()
 {
 	mkdir -p "$BUILD_DIR" && cd "$BUILD_DIR";
@@ -80,7 +68,10 @@ main_run()
 	esac
 
 	source "$SCRIPT_DIR/tarball-config.sh";
-	download_tarball;
+    source "$SCRIPT_DIR/common/download-tarball.sh";
+    local tarball_url="$CURL_BASE_URL/$CURL_TARBALL";
+    local tarball_path="$BUILD_TARBALL_DIR/$CURL_TARBALL";
+	download_tarball "$tarball_url" "$tarball_path";
 
 	build_curl $CONFIG_PARAM;
 
