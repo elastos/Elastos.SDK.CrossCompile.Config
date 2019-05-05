@@ -49,6 +49,7 @@ build_project()
 {
 	mkdir -p "$PROJECT_BUILDDIR" && cd "$PROJECT_BUILDDIR";
 	loginfo "change directory to $PROJECT_BUILDDIR";
+	cd "$PROJECT_BUILDDIR";
 
 	local cmake_ext_args="";
 	if [[ $CFG_WITH_TEST == true ]]; then
@@ -59,8 +60,6 @@ build_project()
         cmake_ext_args+=" -DCFG_ANDROID_SDK=$CFG_ANDROID_SDK";
 	fi
 	echo $cmake_ext_args;
-
-	cd "$PROJECT_BUILDDIR";
 
 	if [ ! -e ".configured" ]; then
         cmake "$PROJECT_DIR" \
@@ -74,8 +73,12 @@ build_project()
 	loginfo "$PROJECT_NAME has been configured."
 
 	if [[ $CFG_IGNORE_BUILD == false ]]; then
-		#make -j$MAX_JOBS VERBOSE=1 && make install;
-		make -j$MAX_JOBS && make install;
+        if [ ! -e ".installed" ]; then
+            #make -j$MAX_JOBS VERBOSE=1 && make install;
+            make -j$MAX_JOBS && make install;
+            touch ".installed";
+        fi
+        loginfo "$PROJECT_NAME has been installed."
 	fi
 }
 

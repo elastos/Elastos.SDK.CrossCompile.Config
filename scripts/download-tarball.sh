@@ -3,21 +3,21 @@
 set -o errexit
 set -o nounset
 
-CURRENT_DIR=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd);
-SCRIPT_DIR=$(dirname "$CURRENT_DIR");
+SCRIPT_DIR=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd);
 source "$SCRIPT_DIR/common/base.sh";
 
 clone_from_github()
 {
     local tarball_url="$1";
     local tarball_path="$2";
+    local tarball_version="$3";
     local tarball_dir="$(basename $tarball_path)";
     local tarball_name="$(basename $tarball_path)";
     local tarball_downloaded="$(dirname $tarball_path)/.$tarball_name";
 
     if [ ! -e "$tarball_downloaded" ]; then
         rm -rf "$tarball_path";
-        local cmd="git clone --depth=1 '$tarball_url' '$tarball_path'";
+        local cmd="git clone --depth=1 --branch=$tarball_version '$tarball_url' '$tarball_path'";
         echo "$cmd";
         eval $cmd;
 
@@ -29,8 +29,7 @@ clone_from_github()
         echo "$cmd" >> "$tarball_downloaded";
     fi
 
-    commit_id=$(cd "$tarball_path" && git rev-parse --short HEAD);
-    loginfo "$tarball_name has been downloaded on commit $commit_id."
+    loginfo "$tarball_name has been downloaded on commit $tarball_version."
 }
 
 download_tarball()

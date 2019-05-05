@@ -29,10 +29,11 @@ main_run()
 	source "$SCRIPT_DIR/common/setenv.sh";
 
 	source "$SCRIPT_DIR/tarball-config.sh";
-    source "$SCRIPT_DIR/common/download-tarball.sh";
+    source "$SCRIPT_DIR/download-tarball.sh";
     local tarball_url="$ELASTOS_SDK_KEYPAIR_C_BASE_URL/$ELASTOS_SDK_KEYPAIR_C_TARBALL";
+    local tarball_version="$ELASTOS_SDK_KEYPAIR_C_VERSION";
     local tarball_path="$BUILD_TARBALL_DIR/$ELASTOS_SDK_KEYPAIR_C_NAME";
-	clone_from_github "$tarball_url" "$tarball_path";
+	clone_from_github "$tarball_url" "$tarball_path" "$tarball_version";
 
 	build_tarball $@;
 

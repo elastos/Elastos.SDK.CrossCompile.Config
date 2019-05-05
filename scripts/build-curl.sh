@@ -39,10 +39,14 @@ build_curl()
     fi
 	loginfo "$CURL_TARBALL has been configured."
 
-	make -j$MAX_JOBS -C lib libcurl.la V=1 && \
-	make -C lib install-libLTLIBRARIES && \
-	make -C include/curl install-pkgincludeHEADERS && \
-	make install-pkgconfigDATA
+	if [ ! -e ".installed" ]; then
+        make -j$MAX_JOBS -C lib libcurl.la V=1 && \
+        make -C lib install-libLTLIBRARIES && \
+        make -C include/curl install-pkgincludeHEADERS && \
+        make install-pkgconfigDATA
+        touch ".installed";
+    fi
+	loginfo "$CURL_TARBALL has been installed."
 }
 
 main_run()
@@ -68,7 +72,7 @@ main_run()
 	esac
 
 	source "$SCRIPT_DIR/tarball-config.sh";
-    source "$SCRIPT_DIR/common/download-tarball.sh";
+    source "$SCRIPT_DIR/download-tarball.sh";
     local tarball_url="$CURL_BASE_URL/$CURL_TARBALL";
     local tarball_path="$BUILD_TARBALL_DIR/$CURL_TARBALL";
 	download_tarball "$tarball_url" "$tarball_path";

@@ -25,7 +25,11 @@ build_sqlite()
     fi
 	loginfo "$SQLITE_TARBALL has been configured."
 
-	make -j$MAX_JOBS libsqlite3.la && make install-libLTLIBRARIES install-includeHEADERS install-pkgconfigDATA
+	if [ ! -e ".installed" ]; then
+        make -j$MAX_JOBS libsqlite3.la && make install-libLTLIBRARIES install-includeHEADERS install-pkgconfigDATA
+        touch ".installed";
+    fi
+	loginfo "$SQLITE_TARBALL has been installed."
 }
 
 main_run()
@@ -47,7 +51,7 @@ main_run()
 	esac
 
 	source "$SCRIPT_DIR/tarball-config.sh";
-    source "$SCRIPT_DIR/common/download-tarball.sh";
+    source "$SCRIPT_DIR/download-tarball.sh";
     local tarball_url="$SQLITE_BASE_URL/$SQLITE_TARBALL";
     local tarball_path="$BUILD_TARBALL_DIR/$SQLITE_TARBALL";
 	download_tarball "$tarball_url" "$tarball_path";

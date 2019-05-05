@@ -26,7 +26,11 @@ build_openssl()
 	loginfo "$OPENSSL_TARBALL has been configured."
 
 	#make -j$MAX_JOBS && make install_engine
-	make install_dev
+	if [ ! -e ".installed" ]; then
+	    make install_dev
+        touch ".installed";
+    fi
+	loginfo "$OPENSSL_TARBALL has been installed."
 }
 
 main_run()
@@ -52,7 +56,7 @@ main_run()
 	esac
 
 	source "$SCRIPT_DIR/tarball-config.sh";
-    source "$SCRIPT_DIR/common/download-tarball.sh";
+    source "$SCRIPT_DIR/download-tarball.sh";
     local tarball_url="$OPENSSL_BASE_URL/$OPENSSL_TARBALL";
     local tarball_path="$BUILD_TARBALL_DIR/$OPENSSL_TARBALL";
 	download_tarball "$tarball_url" "$tarball_path";
