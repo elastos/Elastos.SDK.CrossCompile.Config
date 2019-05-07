@@ -16,11 +16,14 @@ getopt_extfunc_usage()
                  Optional. build test case.
 
        -i, --ignore-build
-                 Optional. only config project but don't build.";
+                 Optional. only config project but don't build.
+
+           --force-build
+                 Optional. force build project.";
 }
 getopt_extfunc_options()
 {
-	echo "sdti;enable-static,without-depends,with-test,ignore-build";
+	echo "sdti;enable-static,without-depends,with-test,ignore-build,force-build";
 }
 getopt_extfunc_processor()
 {
@@ -40,6 +43,10 @@ getopt_extfunc_processor()
 			;;
 		(-i | --ignore-build)
 			CFG_IGNORE_BUILD=true;
+			getopt_extfunc_processor_ret=1;
+			;;
+		(     --force-build)
+			CFG_FORCE_BUILD=true;
 			getopt_extfunc_processor_ret=1;
 			;;
 	esac
@@ -73,6 +80,10 @@ build_project()
 	loginfo "$PROJECT_NAME has been configured."
 
 	if [[ $CFG_IGNORE_BUILD == false ]]; then
+	    if [[ $CFG_FORCE_BUILD == true ]]; then
+            rm -f ".installed";
+        fi
+
         if [ ! -e ".installed" ]; then
             #make -j$MAX_JOBS VERBOSE=1 && make install;
             make -j$MAX_JOBS && make install;
