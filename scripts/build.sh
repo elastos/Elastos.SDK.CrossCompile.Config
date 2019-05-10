@@ -103,7 +103,9 @@ main_run()
 	if [[ $CFG_WITHOUT_DEPENDS == false ]]; then
 		export GETOPT_IGNORE_UNRECOGNIZED=true;
 		if [ "$(type -t build_extfunc_depends)" == "function" ]; then
-			build_extfunc_depends $@;
+            local params=${@//--force-build/}
+
+			build_extfunc_depends $params;
 		else
 			loginfo "Function build_extfunc_depends() is not defined.";
 		fi
