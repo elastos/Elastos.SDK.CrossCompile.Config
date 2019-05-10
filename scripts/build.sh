@@ -18,12 +18,12 @@ getopt_extfunc_usage()
        -i, --ignore-build
                  Optional. only config project but don't build.
 
-           --force-build
+       -b  --force-build
                  Optional. force build project.";
 }
 getopt_extfunc_options()
 {
-	echo "sdti;enable-static,without-depends,with-test,ignore-build,force-build";
+	echo "sdtib;enable-static,without-depends,with-test,ignore-build,force-build";
 }
 getopt_extfunc_processor()
 {
@@ -45,7 +45,7 @@ getopt_extfunc_processor()
 			CFG_IGNORE_BUILD=true;
 			getopt_extfunc_processor_ret=1;
 			;;
-		(     --force-build)
+		(-b | --force-build)
 			CFG_FORCE_BUILD=true;
 			getopt_extfunc_processor_ret=1;
 			;;
