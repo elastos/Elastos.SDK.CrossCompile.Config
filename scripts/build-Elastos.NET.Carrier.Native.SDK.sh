@@ -17,7 +17,10 @@ build_tarball()
 	if [ ! -e ".configured" ]; then
         cmake . \
             -DCMAKE_INSTALL_PREFIX="$OUTPUT_DIR" \
-            -DENABLE_SHARED=OFF;
+            -DENABLE_SHARED=ON \
+            -DENABLE_APPS=OFF \
+            -DENABLE_TESTS=OFF \
+            -DENABLE_DOCS=OFF;
 
         touch ".configured";
     fi
