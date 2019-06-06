@@ -25,7 +25,6 @@ build_curl()
             --disable-dict \
             --disable-ftp \
             --disable-gopher \
-            --disable-imap \
             --disable-pop3 \
             --disable-rtsp \
             --disable-smb \

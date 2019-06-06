@@ -21,7 +21,8 @@ build_json()
 
 	#make -j$MAX_JOBS && make install_engine
 	if [ ! -e ".installed" ]; then
-        cp -r "$BUILD_DIR/$JSON_NAME/include/"* "$OUTPUT_DIR/include";
+        mkdir -p "$OUTPUT_DIR/include/";
+        cp -r "$BUILD_DIR/$JSON_NAME/include/nlohmann" "$OUTPUT_DIR/include/";
         touch ".installed";
     fi
 	loginfo "$JSON_TARBALL has been installed."
