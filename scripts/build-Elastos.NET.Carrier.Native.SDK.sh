@@ -33,6 +33,7 @@ build_tarball()
 
         cmake $project_dir \
             -DCMAKE_INSTALL_PREFIX="$OUTPUT_DIR" \
+            -DENABLE_SHARED=OFF \
             -DENABLE_TESTS=OFF \
             -DENABLE_APPS=OFF \
             -DENABLE_DOCS=OFF \
