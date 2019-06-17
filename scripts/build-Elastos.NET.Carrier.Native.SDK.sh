@@ -10,6 +10,7 @@ build_tarball()
 
 	if [ ! -e "$BUILD_DIR/$ELASTOS_NET_CARRIER_NATIVE_SDK_NAME" ]; then
 		cp -r "$BUILD_TARBALL_DIR/$ELASTOS_NET_CARRIER_NATIVE_SDK_NAME" "$BUILD_DIR/$ELASTOS_NET_CARRIER_NATIVE_SDK_NAME";
+        cd "$BUILD_DIR/$ELASTOS_NET_CARRIER_NATIVE_SDK_NAME" && git am 259.patch;
 	fi
 	loginfo "${ELASTOS_NET_CARRIER_NATIVE_SDK_TARBALL//\//-} has been unpacked."
     local project_dir="$BUILD_DIR/$ELASTOS_NET_CARRIER_NATIVE_SDK_NAME";
@@ -70,6 +71,11 @@ main_run()
     local tarball_version="$ELASTOS_NET_CARRIER_NATIVE_SDK_VERSION";
     local tarball_path="$BUILD_TARBALL_DIR/$ELASTOS_NET_CARRIER_NATIVE_SDK_NAME";
 	clone_from_github "$tarball_url" "$tarball_path" "$tarball_version";
+
+    local patch_name="259.patch";
+    if [ ! -e "$tarball_path/$patch_name" ]; then
+        cd "$tarball_path" && wget "${tarball_url%.git}/pull/259.patch"
+    fi
 
 	build_tarball $@;
 
