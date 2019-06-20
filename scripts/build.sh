@@ -19,11 +19,14 @@ getopt_extfunc_usage()
                  Optional. only config project but don't build.
 
        -b  --force-build
-                 Optional. force build project.";
+                 Optional. force build project.
+
+       -g  --debug
+                 Optional. build  project as debug.";
 }
 getopt_extfunc_options()
 {
-	echo "sdtib;enable-static,without-depends,with-test,ignore-build,force-build";
+	echo "sdtibg;enable-static,without-depends,with-test,ignore-build,force-build,debug";
 }
 getopt_extfunc_processor()
 {
@@ -49,6 +52,10 @@ getopt_extfunc_processor()
 			CFG_FORCE_BUILD=true;
 			getopt_extfunc_processor_ret=1;
 			;;
+		(-g | --debug)
+			CFG_DEBUG=true;
+			getopt_extfunc_processor_ret=1;
+			;;
 	esac
 }
 
@@ -65,6 +72,9 @@ build_project()
 	if [[ $CFG_TARGET_PLATFORM == "Android" ]]; then
 		cmake_ext_args+=" -DCFG_ANDROID_TOOLCHAIN_PATH=$CFG_ANDROID_TOOLCHAIN_PATH";
         cmake_ext_args+=" -DCFG_ANDROID_SDK=$CFG_ANDROID_SDK";
+	fi
+	if [[ $CFG_DEBUG == true ]]; then
+		cmake_ext_args+=" -DCMAKE_BUILD_TYPE=Debug";
 	fi
 	echo $cmake_ext_args;
 
@@ -139,6 +149,7 @@ CFG_WITHOUT_DEPENDS=false;
 CFG_WITH_TEST=false;
 CFG_IGNORE_BUILD=false;
 CFG_FORCE_BUILD=false;
+CFG_DEBUG=false;
 PROJECT_NAME=${CFG_PROJECT_NAME:="Unknown"}
 
 main_run $@;
