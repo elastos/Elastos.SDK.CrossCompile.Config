@@ -22,9 +22,15 @@ build_tarball()
 	if [ ! -e ".configured" ]; then
         local ext=;
         if [[ "${CFG_TARGET_PLATFORM}" == "Android" ]]; then
-            local cmake_toolchain=$(cat $project_dir/cmake/${CFG_TARGET_PLATFORM}Toolchain.cmake);
-            cmake_toolchain=${cmake_toolchain/CMAKE_SYSTEM_VERSION 21/CMAKE_SYSTEM_VERSION 16};
-            echo "$cmake_toolchain" > $project_dir/cmake/${CFG_TARGET_PLATFORM}Toolchain.cmake;
+            local filepath="$project_dir/cmake/${CFG_TARGET_PLATFORM}Toolchain.cmake";
+            local cmake_toolchain=$(cat "$filepath");
+            cmake_toolchain=${cmake_toolchain/CMAKE_SYSTEM_VERSION 21/CMAKE_SYSTEM_VERSION ${CFG_ANDROID_SDK}};
+            echo "$cmake_toolchain" > "$filepath";
+
+            filepath="$project_dir/src/session/CMakeLists.txt";
+            local bugfix=$(cat "$filepath");
+            bugfix=${bugfix/add_subdirectory(pseudotcp)/};
+            echo "$bugfix" > "$filepath";
 
             ext+=" -DANDROID_ABI=$CFG_TARGET_ABI";
             ext+=" -DCMAKE_TOOLCHAIN_FILE=$project_dir/cmake/${CFG_TARGET_PLATFORM}Toolchain.cmake";
@@ -49,7 +55,11 @@ build_tarball()
     if [ ! -e ".installed" ]; then
         #make -j$MAX_JOBS VERBOSE=1 && make install;
         make -j$MAX_JOBS && make install;
-        cp -f "intermediates/lib/libhive-api.a" "$OUTPUT_DIR/lib";
+        if [ $? != 0 ]; then # make again, for hive build bug.
+            exit 1;
+        fi
+
+        cp "intermediates/lib/libhive-api.a" "$OUTPUT_DIR/lib";
         cp "intermediates/lib/libhive-api++.a" "$OUTPUT_DIR/lib";
         cp "intermediates/lib/libsrtp.a" "$OUTPUT_DIR/lib";
         cp "intermediates/lib/libtoxcore.a" "$OUTPUT_DIR/lib";
