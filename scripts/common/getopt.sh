@@ -9,7 +9,7 @@ getopt_parse_options()
 {
 	local getopt_cmd="getopt";
 	if [ "$(uname -s)" == "Darwin" ]; then
-		getopt_cmd="/usr/local/Cellar/gnu-getopt/1.1.6/bin/getopt";
+        getopt_cmd="$(ls /usr/local/Cellar/gnu-getopt/*/bin/getopt)";
 	fi
 
 	getopt_ext=([0]= [1]=);
