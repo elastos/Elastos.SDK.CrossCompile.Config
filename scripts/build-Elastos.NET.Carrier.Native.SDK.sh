@@ -19,7 +19,7 @@ build_tarball()
 	#cd "$project_dir";
 
     PATH="/usr/bin:$PATH";
-	if [ ! -e ".configured" ]; then
+    if [ ! -e ".configured" ]; then
         local ext=;
         if [[ "${CFG_TARGET_PLATFORM}" == "Android" ]]; then
             local filepath="$project_dir/cmake/${CFG_TARGET_PLATFORM}Toolchain.cmake";
@@ -33,10 +33,20 @@ build_tarball()
             echo "$bugfix" > "$filepath";
 
             ext+=" -DANDROID_ABI=$CFG_TARGET_ABI";
-            ext+=" -DCMAKE_TOOLCHAIN_FILE=$project_dir/cmake/${CFG_TARGET_PLATFORM}Toolchain.cmake";
         elif [[ "${CFG_TARGET_PLATFORM}" == "iOS" ]]; then
-            ext+="-DCMAKE_TOOLCHAIN_FILE=$project_dir/cmake/${CFG_TARGET_PLATFORM}Toolchain.cmake";
+            local filepath="$project_dir/cmake/${CFG_TARGET_PLATFORM}Toolchain.cmake";
+            local cmake_toolchain=$(cat "$filepath");
+            cmake_toolchain=${cmake_toolchain/IOS_DEPLOYMENT_TARGET \"9.0\"/IOS_DEPLOYMENT_TARGET \"${IPHONEOS_DEPLOYMENT_TARGET}\"};
+            echo "$cmake_toolchain" > "$filepath";
+
+            local platform="iphonesimulator";
+            if [[ "${CFG_TARGET_ABI}" != "x86_64" ]]; then
+                platform="iphoneos";
+            fi
+            ext+=" -DIOS_PLATFORM=$platform";
+            ext+=" -DCMAKE_CROSSCOMPILING=true";
         fi
+        ext+=" -DCMAKE_TOOLCHAIN_FILE=$project_dir/cmake/${CFG_TARGET_PLATFORM}Toolchain.cmake";
 
         cmake $project_dir \
             -DCMAKE_INSTALL_PREFIX="$OUTPUT_DIR" \
@@ -53,8 +63,14 @@ build_tarball()
 	loginfo "$ELASTOS_NET_CARRIER_NATIVE_SDK_NAME has been configured."
 
     if [ ! -e ".installed" ]; then
-        #make -j$MAX_JOBS VERBOSE=1 && make install;
-        make -j$MAX_JOBS && make install;
+        if [[ "${CFG_TARGET_PLATFORM}" == "iOS" ]]; then
+            export IPHONEOS_DEPLOYMENT_TARGET=;
+            export CFLAGS=;
+            export CXXFLAGS=;
+            export LDFLAGS=;
+        fi
+        make -j$MAX_JOBS VERBOSE=1 && make install;
+        #make -j$MAX_JOBS && make install;
         if [ $? != 0 ]; then # make again, for hive build bug.
             exit 1;
         fi
