@@ -10,7 +10,7 @@ build_tarball()
 
 	if [ ! -e "$BUILD_DIR/$ELASTOS_NET_CARRIER_NATIVE_SDK_NAME" ]; then
 		cp -r "$BUILD_TARBALL_DIR/$ELASTOS_NET_CARRIER_NATIVE_SDK_NAME" "$BUILD_DIR/$ELASTOS_NET_CARRIER_NATIVE_SDK_NAME";
-        cd "$BUILD_DIR/$ELASTOS_NET_CARRIER_NATIVE_SDK_NAME" && git am 259.patch;
+        #cd "$BUILD_DIR/$ELASTOS_NET_CARRIER_NATIVE_SDK_NAME" && git am 259.patch;
 	fi
 	loginfo "${ELASTOS_NET_CARRIER_NATIVE_SDK_TARBALL//\//-} has been unpacked."
     local project_dir="$BUILD_DIR/$ELASTOS_NET_CARRIER_NATIVE_SDK_NAME";
@@ -69,16 +69,16 @@ build_tarball()
             export CXXFLAGS=;
             export LDFLAGS=;
         fi
-        make -j$MAX_JOBS VERBOSE=1 && make install;
-        #make -j$MAX_JOBS && make install;
+        #make -j$MAX_JOBS VERBOSE=1 && make install;
+        make -j$MAX_JOBS && make install;
         if [ $? != 0 ]; then # make again, for hive build bug.
             exit 1;
         fi
 
-        cp "intermediates/lib/libhive-api.a" "$OUTPUT_DIR/lib";
-        cp "intermediates/lib/libhive-api++.a" "$OUTPUT_DIR/lib";
-        cp "intermediates/lib/libsrtp.a" "$OUTPUT_DIR/lib";
-        cp "intermediates/lib/libtoxcore.a" "$OUTPUT_DIR/lib";
+        #cp "intermediates/lib/libhive-api.a" "$OUTPUT_DIR/lib";
+        #cp "intermediates/lib/libhive-api++.a" "$OUTPUT_DIR/lib";
+        #cp "intermediates/lib/libsrtp.a" "$OUTPUT_DIR/lib";
+        #cp "intermediates/lib/libtoxcore.a" "$OUTPUT_DIR/lib";
         touch ".installed";
     fi
     loginfo "$ELASTOS_NET_CARRIER_NATIVE_SDK_NAME has been installed."
@@ -98,10 +98,10 @@ main_run()
     local tarball_path="$BUILD_TARBALL_DIR/$ELASTOS_NET_CARRIER_NATIVE_SDK_NAME";
 	clone_from_github "$tarball_url" "$tarball_path" "$tarball_version";
 
-    local patch_name="259.patch";
-    if [ ! -e "$tarball_path/$patch_name" ]; then
-        cd "$tarball_path" && wget "${tarball_url%.git}/pull/259.patch"
-    fi
+    #local patch_name="259.patch";
+    #if [ ! -e "$tarball_path/$patch_name" ]; then
+        #cd "$tarball_path" && wget "${tarball_url%.git}/pull/259.patch"
+    #fi
 
 	build_tarball $@;
 
