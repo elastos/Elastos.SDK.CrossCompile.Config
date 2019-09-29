@@ -18,21 +18,58 @@ build_tarball()
 	cd "$project_dir/build/${CFG_TARGET_PLATFORM}";
 	#cd "$project_dir";
 
-    PATH="/usr/bin:$PATH";
+    #PATH="/usr/bin:$PATH";
     if [ ! -e ".configured" ]; then
         local ext=;
         if [[ "${CFG_TARGET_PLATFORM}" == "Android" ]]; then
+            rm -f .android_toolchain;
+            ln -sf $CFG_ANDROID_TOOLCHAIN_PATH .android_toolchain;
+
             local filepath="$project_dir/cmake/${CFG_TARGET_PLATFORM}Toolchain.cmake";
             local cmake_toolchain=$(cat "$filepath");
             cmake_toolchain=${cmake_toolchain/CMAKE_SYSTEM_VERSION 21/CMAKE_SYSTEM_VERSION ${CFG_ANDROID_SDK}};
             echo "$cmake_toolchain" > "$filepath";
+
+            filepath="$project_dir/deps/platform-specific/CMakeLists.txt";
+            local bugfix=$(cat "$filepath");
+            bugfix=${bugfix/if(ANDROID)/if(!ANDROID)};
+            bugfix=${bugfix/CMAKE_ARGS -DCMAKE_INSTALL_PREFIX/CMAKE_COMMAND CFLAGS=; cmake CMAKE_ARGS -DCMAKE_INSTALL_PREFIX};
+            bugfix=${bugfix/CMAKE_ARGS -DCMAKE_INSTALL_PREFIX/CMAKE_ARGS -DCMAKE_C_COMPILER=/usr/bin/clang -DCMAKE_INSTALL_PREFIX};
+            echo "$bugfix" > "$filepath";
+
+            filepath="$project_dir/deps/cJSON/CMakeLists.txt";
+            local bugfix=$(cat "$filepath");
+            bugfix=${bugfix/CMAKE_ARGS -DCMAKE_INSTALL_PREFIX/CMAKE_ARGS -DENABLE_CJSON_TEST=Off -DCMAKE_INSTALL_PREFIX};
+            echo "$bugfix" > "$filepath";
 
             filepath="$project_dir/src/session/CMakeLists.txt";
             local bugfix=$(cat "$filepath");
             bugfix=${bugfix/add_subdirectory(pseudotcp)/};
             echo "$bugfix" > "$filepath";
 
-            ext+=" -DANDROID_ABI=$CFG_TARGET_ABI";
+            local eol=$'\n'
+
+            filepath="$project_dir/src/carrier/ela_carrier.c";
+            local bugfix=$(cat "$filepath");
+            bugfix="#include <unistd.h>$eol$bugfix";
+            echo "$bugfix" > "$filepath";
+
+            filepath="$project_dir/src/carrier/dstore/dstore.c";
+            local bugfix=$(cat "$filepath");
+            bugfix="#define MAXPATHLEN 1024$eol$bugfix";
+            echo "$bugfix" > "$filepath";
+
+            SCRIPT_DIR=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd);
+
+            #ext+=" -DANDROID_ABI=$CFG_TARGET_ABI";
+            ext+=" -DCFG_ANDROID_SDK=$CFG_ANDROID_SDK";
+            ext+=" -DCFG_TARGET_PLATFORM=$CFG_TARGET_PLATFORM";
+            ext+=" -DCFG_ANDROID_TOOLCHAIN_PATH=$CFG_ANDROID_TOOLCHAIN_PATH";
+            ext+=" -DCMAKE_TOOLCHAIN_FILE=$SCRIPT_DIR/../cmake/CMakeLists.txt";
+            ext+=" -DCMAKE_C_COMPILER_WORKS=true";
+            ext+=" -DCMAKE_CXX_COMPILER_WORKS=true";
+            ext+=" -DHAVE_SYS_EVENTFD_H=1";
+            #ext+=" -DCMAKE_TOOLCHAIN_FILE=$project_dir/cmake/${CFG_TARGET_PLATFORM}Toolchain.cmake";
         elif [[ "${CFG_TARGET_PLATFORM}" == "iOS" ]]; then
             local filepath="$project_dir/cmake/${CFG_TARGET_PLATFORM}Toolchain.cmake";
             local cmake_toolchain=$(cat "$filepath");
@@ -45,8 +82,8 @@ build_tarball()
             fi
             ext+=" -DIOS_PLATFORM=$platform";
             ext+=" -DCMAKE_CROSSCOMPILING=true";
+            ext+=" -DCMAKE_TOOLCHAIN_FILE=$project_dir/cmake/${CFG_TARGET_PLATFORM}Toolchain.cmake";
         fi
-        ext+=" -DCMAKE_TOOLCHAIN_FILE=$project_dir/cmake/${CFG_TARGET_PLATFORM}Toolchain.cmake";
 
         cmake $project_dir \
             -DCMAKE_INSTALL_PREFIX="$OUTPUT_DIR" \
@@ -54,6 +91,7 @@ build_tarball()
             -DENABLE_TESTS=OFF \
             -DENABLE_APPS=OFF \
             -DENABLE_DOCS=OFF \
+            -DCMAKE_CROSSCOMPILING=ON \
             $ext;
 
             #-DENABLE_SHARED=OFF \
