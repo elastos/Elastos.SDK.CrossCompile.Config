@@ -18,15 +18,20 @@ if [[ "$ANDROID_NDK_HOME" == .* ]]; then
 	exit 1
 fi
 
+LIST_IDX=-1;
 SDK_LIST=(16 21 21)
 ARCH_LIST=(arm arm64 x86_64)
 TOOLCHAIN_LIST=(arm-linux-androideabi aarch64-linux-android x86_64-linux-android)
 for idx in "${!SYSTEM_ABIS[@]}"; do
-	if [[ "${SYSTEM_ABIS[$idx]}" = "${CFG_TARGET_ABI}" ]]; then
+	if [[ "${SYSTEM_ABIS[$idx]}" == "${CFG_TARGET_ABI}" ]]; then
 		LIST_IDX=${idx}
 		break;
 	fi
 done
+if (( $LIST_IDX < 0 )); then
+	echo "Unknown arch: $CFG_TARGET_ABI";
+	exit 1
+fi
 
 #Configure toolchain
 CFG_ANDROID_SDK=${SDK_LIST[$LIST_IDX]};

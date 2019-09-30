@@ -42,6 +42,13 @@ build_tarball()
             bugfix=${bugfix/CMAKE_ARGS -DCMAKE_INSTALL_PREFIX/CMAKE_ARGS -DENABLE_CJSON_TEST=Off -DCMAKE_INSTALL_PREFIX};
             echo "$bugfix" > "$filepath";
 
+            filepath="$project_dir/deps/CUnit/CMakeLists.txt";
+            local bugfix=$(cat "$filepath");
+            bugfix=${bugfix/CONFIGURE_COMMAND.*/CONFIGURE_COMMAND echo done};
+            bugfix=${bugfix/BUILD_COMMAND.*/BUILD_COMMAND echo done};
+            bugfix=${bugfix/INSTALL_COMMAND.*/INSTALL_COMMAND echo done};
+            echo "$bugfix" > "$filepath";
+
             filepath="$project_dir/src/session/CMakeLists.txt";
             local bugfix=$(cat "$filepath");
             bugfix=${bugfix/add_subdirectory(pseudotcp)/};
@@ -65,10 +72,13 @@ build_tarball()
             ext+=" -DCFG_ANDROID_SDK=$CFG_ANDROID_SDK";
             ext+=" -DCFG_TARGET_PLATFORM=$CFG_TARGET_PLATFORM";
             ext+=" -DCFG_ANDROID_TOOLCHAIN_PATH=$CFG_ANDROID_TOOLCHAIN_PATH";
-            ext+=" -DCMAKE_TOOLCHAIN_FILE=$SCRIPT_DIR/../cmake/CMakeLists.txt";
+            ext+=" -DCFG_TARGET_ABI=$CFG_TARGET_ABI";
+
             ext+=" -DCMAKE_C_COMPILER_WORKS=true";
             ext+=" -DCMAKE_CXX_COMPILER_WORKS=true";
             ext+=" -DHAVE_SYS_EVENTFD_H=1";
+            ext+=" -DCMAKE_CROSSCOMPILING=true";
+            ext+=" -DCMAKE_TOOLCHAIN_FILE=$SCRIPT_DIR/../cmake/CMakeLists.txt";
             #ext+=" -DCMAKE_TOOLCHAIN_FILE=$project_dir/cmake/${CFG_TARGET_PLATFORM}Toolchain.cmake";
         elif [[ "${CFG_TARGET_PLATFORM}" == "iOS" ]]; then
             local filepath="$project_dir/cmake/${CFG_TARGET_PLATFORM}Toolchain.cmake";
