@@ -32,7 +32,27 @@ build_curl()
             --disable-telnet \
             --disable-tftp \
             --disable-ldap \
+            --without-default-ssl-backend \
+            --without-winssl \
+            --without-darwinssl \
+            --without-brotli \
+            --without-gnutls \
+            --without-polarssl \
+            --without-mbedtls \
+            --without-cyassl \
+            --without-wolfssl \
+            --without-mesalink \
+            --without-nss \
+            --without-ca-bundle \
+            --without-ca-path \
+            --without-ca-fallback \
+            --without-libpsl \
+            --without-libmetalink \
+            --without-librtmp \
+            --without-winidn \
             --without-libidn2 \
+            --without-nghttp2 \
+            --without-zsh-functions-dir \
             $@
         touch ".configured";
     fi
