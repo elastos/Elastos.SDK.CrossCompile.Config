@@ -23,13 +23,13 @@ build_tarball()
         filepath="$project_dir/deps/CMakeLists.txt";
         local cunitIdx=$(grep -n CUnit $filepath);
         cunitIdx=${cunitIdx%%:*};
-        echo "cunitIdx=$cunitIdx";
+        #echo "cunitIdx=$cunitIdx";
         local bugContent=$(cat "$filepath");
         local bugHead=$(echo "$bugContent" |head -n $((cunitIdx - 1)));
         local bugRemoved="$(echo && echo '#Remove CUnit' && echo ' ')";
         local bugTail=$(echo "$bugContent" |tail -n +$((cunitIdx + 2)));
         local bugfix="$bugHead$bugRemoved$bugTail";
-        echo "bugfix=$bugfix";
+        #echo "bugfix=$bugfix";
         echo "$bugfix" > "$filepath";
 
         local ext=;
