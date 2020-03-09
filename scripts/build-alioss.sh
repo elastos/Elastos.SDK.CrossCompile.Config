@@ -22,21 +22,20 @@ build_alioss()
         echo 'project(oss_c_sdk)'                                                               >> "$cmakeFilePath";
         echo 'pkg_search_module(pkg-apr REQUIRED apr-1)'                                        >> "$cmakeFilePath";
         echo 'pkg_search_module(pkg-curl REQUIRED libcurl)'                                     >> "$cmakeFilePath";
+
+        echo 'include_directories("${CMAKE_INSTALL_PREFIX}/include")'                           >> "$cmakeFilePath";
+        echo 'include_directories("${pkg-curl_INCLUDE_DIRS}")'                                  >> "$cmakeFilePath";
+        echo 'include_directories("${pkg-apr_INCLUDE_DIRS}")'                                   >> "$cmakeFilePath";
+
         echo 'file( GLOB oss_c_sdk-SOURCES "oss_c_sdk/*.c" )'                                   >> "$cmakeFilePath";
         echo 'file( GLOB oss_c_sdk-HEADERS "oss_c_sdk/*.h")'                                    >> "$cmakeFilePath";
         echo 'add_library(oss_c_sdk)'                                                           >> "$cmakeFilePath";
         echo 'target_sources(oss_c_sdk PRIVATE ${oss_c_sdk-SOURCES})'                           >> "$cmakeFilePath";
-        echo 'target_include_directories(oss_c_sdk PRIVATE "${CMAKE_INSTALL_PREFIX}/include")'  >> "$cmakeFilePath";
-
-        echo 'target_include_directories(oss_c_sdk PRIVATE "${pkg-curl_INCLUDE_DIRS}")'         >> "$cmakeFilePath";
-        #echo 'target_link_libraries(oss_c_sdk PRIVATE "${pkg-curl_STATIC_LDFLAGS}")'           >> "$cmakeFilePath";
-
-        echo 'target_include_directories(oss_c_sdk PRIVATE "${pkg-apr_INCLUDE_DIRS}")'          >> "$cmakeFilePath";
-        #echo 'target_link_libraries(oss_c_sdk PRIVATE ${pkg-apr_STATIC_LDFLAGS})'              >> "$cmakeFilePath";
 
         echo 'set_target_properties(oss_c_sdk PROPERTIES PUBLIC_HEADER "${oss_c_sdk-HEADERS}")' >> "$cmakeFilePath";
         echo 'install(TARGETS oss_c_sdk LIBRARY DESTINATION lib ARCHIVE DESTINATION lib PUBLIC_HEADER DESTINATION include)' \
                                                                                                 >> "$cmakeFilePath";
+        echo 'add_subdirectory(oss_c_sdk_sample)'                                               >> "$cmakeFilePath";
 
         cmake "$BUILD_DIR/$ALIOSS_NAME" \
             -DCMAKE_INSTALL_PREFIX="$OUTPUT_DIR";
@@ -44,14 +43,14 @@ build_alioss()
     fi
 	loginfo "$ALIOSS_TARBALL has been configured."
 
-	if [ ! -e ".installed" ]; then
+    if [ ! -e ".installed" ]; then
         mkdir -p "$OUTPUT_DIR/include/";
         #make -j$MAX_JOBS libsqlite3.la && make install-libLTLIBRARIES install-includeHEADERS install-pkgconfigDATA
-	    make -j$MAX_JOBS VERBOSE=1;
+        make -j$MAX_JOBS;
         make install;
         touch ".installed";
     fi
-	loginfo "$ALIOSS_TARBALL has been installed."
+    loginfo "$ALIOSS_TARBALL has been installed."
 }
 
 main_run()
@@ -67,7 +66,7 @@ main_run()
     local tarball_path="$BUILD_TARBALL_DIR/$ALIOSS_TARBALL";
 	download_tarball "$tarball_url" "$tarball_path";
 
-	build_alioss;
+	build_alioss $@;
 
 	loginfo "DONE !!!";
 }
