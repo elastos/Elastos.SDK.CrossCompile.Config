@@ -52,8 +52,8 @@ MINIXML_URL="https://github.com/michaelrsweet/mxml/releases/download/v$MINIXML_V
 MINIXML_NAME="minixml-$MINIXML_VERSION";
 MINIXML_TARBALL="$MINIXML_NAME.tar.gz";
 
-ALIOSS_VERSION="3.9.1";
-ALIOSS_URL="https://github.com/aliyun/aliyun-oss-c-sdk/archive/$ALIOSS_VERSION.tar.gz";
-ALIOSS_NAME="aliyun-oss-c-sdk-$ALIOSS_VERSION";
+ALIOSS_VERSION="1.7.0";
+ALIOSS_URL="https://github.com/aliyun/aliyun-oss-cpp-sdk/archive/$ALIOSS_VERSION.tar.gz";
+ALIOSS_NAME="aliyun-oss-cpp-sdk-$ALIOSS_VERSION";
 ALIOSS_TARBALL="$ALIOSS_NAME.tar.gz";
 

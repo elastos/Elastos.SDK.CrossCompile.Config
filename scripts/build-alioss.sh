@@ -16,36 +16,20 @@ build_alioss()
 	cd "$BUILD_DIR/$ALIOSS_NAME";
 
 	if [ ! -e ".configured" ]; then
-        local cmakeFilePath="$BUILD_DIR/$ALIOSS_NAME/CMakeLists.txt";
-        echo 'cmake_minimum_required(VERSION 3.12)'                                             >  "$cmakeFilePath";
-        echo 'include('"$SCRIPT_PARENT_DIR"'/cmake/CMakeLists.txt)'                             >> "$cmakeFilePath";
-        echo 'project(oss_c_sdk)'                                                               >> "$cmakeFilePath";
-        echo 'pkg_search_module(pkg-apr REQUIRED apr-1)'                                        >> "$cmakeFilePath";
-        echo 'pkg_search_module(pkg-curl REQUIRED libcurl)'                                     >> "$cmakeFilePath";
-
-        echo 'include_directories("${CMAKE_INSTALL_PREFIX}/include")'                           >> "$cmakeFilePath";
-        echo 'include_directories("${pkg-curl_INCLUDE_DIRS}")'                                  >> "$cmakeFilePath";
-        echo 'include_directories("${pkg-apr_INCLUDE_DIRS}")'                                   >> "$cmakeFilePath";
-
-        echo 'file( GLOB oss_c_sdk-SOURCES "oss_c_sdk/*.c" )'                                   >> "$cmakeFilePath";
-        echo 'file( GLOB oss_c_sdk-HEADERS "oss_c_sdk/*.h")'                                    >> "$cmakeFilePath";
-        echo 'add_library(oss_c_sdk)'                                                           >> "$cmakeFilePath";
-        echo 'target_sources(oss_c_sdk PRIVATE ${oss_c_sdk-SOURCES})'                           >> "$cmakeFilePath";
-
-        echo 'set_target_properties(oss_c_sdk PROPERTIES PUBLIC_HEADER "${oss_c_sdk-HEADERS}")' >> "$cmakeFilePath";
-        echo 'install(TARGETS oss_c_sdk LIBRARY DESTINATION lib ARCHIVE DESTINATION lib PUBLIC_HEADER DESTINATION include)' \
-                                                                                                >> "$cmakeFilePath";
-        echo 'add_subdirectory(oss_c_sdk_sample)'                                               >> "$cmakeFilePath";
+        local cmakeFilePath="$BUILD_DIR/$ALIOSS_NAME/sample/CMakeLists.txt";
+        echo ''                                         >> "$cmakeFilePath";
+        echo 'target_link_libraries(${PROJECT_NAME} z)' >> "$cmakeFilePath";
 
         cmake "$BUILD_DIR/$ALIOSS_NAME" \
-            -DCMAKE_INSTALL_PREFIX="$OUTPUT_DIR";
+            -DCMAKE_INSTALL_PREFIX="$OUTPUT_DIR" \
+            -DCMAKE_PREFIX_PATH="$OUTPUT_DIR" \
+            -DOPENSSL_ROOT_DIR="$OUTPUT_DIR";
         touch ".configured";
     fi
 	loginfo "$ALIOSS_TARBALL has been configured."
 
     if [ ! -e ".installed" ]; then
         mkdir -p "$OUTPUT_DIR/include/";
-        #make -j$MAX_JOBS libsqlite3.la && make install-libLTLIBRARIES install-includeHEADERS install-pkgconfigDATA
         make -j$MAX_JOBS;
         make install;
         touch ".installed";

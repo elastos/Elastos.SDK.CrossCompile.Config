@@ -81,6 +81,7 @@ build_project()
 	if [ ! -e ".configured" ]; then
         cmake "$CFG_CMAKELIST_DIR" \
             -DCMAKE_INSTALL_PREFIX="$OUTPUT_DIR" \
+            -DCMAKE_PREFIX_PATH="$OUTPUT_DIR" \
             -DBUILD_SHARED_LIBS=$CFG_ENABLE_SHARED_LIB \
             -DCFG_TARGET_PLATFORM=$CFG_TARGET_PLATFORM \
             -DCFG_TARGET_ABI=$CFG_TARGET_ABI \
