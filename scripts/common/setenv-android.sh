@@ -7,6 +7,7 @@ SYSTEM_NAME="Android"
 SYSTEM_ABIS=(armeabi-v7a arm64-v8a x86_64)
 BUILD_DIR="$BUILD_BASE_DIR/$SYSTEM_NAME/$CFG_TARGET_ABI";
 OUTPUT_DIR="$BUILD_ROOT_DIR/$SYSTEM_NAME/$CFG_TARGET_ABI";
+TMP_DIR="/tmp/elastos.crosscompile.config/$SYSTEM_NAME/$CFG_TARGET_ABI";
 
 if [ -z "$ANDROID_NDK_HOME" ]; then
 	echo "Please set your ANDROID_NDK_HOME environment variable first"
@@ -36,16 +37,17 @@ fi
 #Configure toolchain
 CFG_ANDROID_SDK=${SDK_LIST[$LIST_IDX]};
 ANDROID_TOOLCHAIN=${TOOLCHAIN_LIST[$LIST_IDX]};
-CFG_ANDROID_TOOLCHAIN_PATH="$BUILD_DIR/toolchain";
-if [ ! -e "$BUILD_DIR/.toolchain" ]; then
-	rm -rf "$CFG_ANDROID_TOOLCHAIN_PATH"
-	$ANDROID_NDK_HOME/build/tools/make-standalone-toolchain.sh \
-		--arch=${ARCH_LIST[$LIST_IDX]} \
-		--platform=android-${CFG_ANDROID_SDK} \
-		--toolchain=${ANDROID_TOOLCHAIN}-clang \
-		--stl=libc++ --install-dir="$CFG_ANDROID_TOOLCHAIN_PATH";
+CFG_ANDROID_TOOLCHAIN_PATH="$TMP_DIR/toolchain";
+if [ ! -e "$TMP_DIR/.toolchain" ]; then
+    echo "Make android standalone toolchain to $CFG_ANDROID_TOOLCHAIN_PATH";
+    rm -rf "$CFG_ANDROID_TOOLCHAIN_PATH"
+    $ANDROID_NDK_HOME/build/tools/make-standalone-toolchain.sh \
+        --arch=${ARCH_LIST[$LIST_IDX]} \
+        --platform=android-${CFG_ANDROID_SDK} \
+        --toolchain=${ANDROID_TOOLCHAIN}-clang \
+        --stl=libc++ --install-dir="$CFG_ANDROID_TOOLCHAIN_PATH";
 
-	touch "$BUILD_DIR/.toolchain";
+    touch "$TMP_DIR/.toolchain";
 fi
 
 export CFG_ANDROID_TOOLCHAIN_PATH
