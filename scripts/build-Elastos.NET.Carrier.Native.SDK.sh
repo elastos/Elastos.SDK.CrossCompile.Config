@@ -93,6 +93,7 @@ build_tarball()
             ext+=" -DHAVE_SYS_EVENTFD_H=1";
             ext+=" -DCMAKE_CROSSCOMPILING=true";
             ext+=" -DCMAKE_TOOLCHAIN_FILE=$SCRIPT_DIR/../cmake/CMakeLists.txt";
+            ext+=" -DCMAKE_ANDROID_ARCH_HEADER_TRIPLE=$ANDROID_TOOLCHAIN";
             #ext+=" -DCMAKE_TOOLCHAIN_FILE=$project_dir/cmake/${CFG_TARGET_PLATFORM}Toolchain.cmake";
         elif [[ "${CFG_TARGET_PLATFORM}" == "iOS" ]]; then
             local filepath="$project_dir/cmake/${CFG_TARGET_PLATFORM}Toolchain.cmake";
