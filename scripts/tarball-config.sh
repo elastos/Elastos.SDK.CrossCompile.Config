@@ -57,3 +57,7 @@ ALIOSS_URL="https://github.com/aliyun/aliyun-oss-cpp-sdk/archive/$ALIOSS_VERSION
 ALIOSS_NAME="aliyun-oss-cpp-sdk-$ALIOSS_VERSION";
 ALIOSS_TARBALL="$ALIOSS_NAME.tar.gz";
 
+PERSONALSTORAGE_SDK_OSS_BASE_URL="https://github.com/elaphantapp";
+PERSONALSTORAGE_SDK_OSS_VERSION="master";
+PERSONALSTORAGE_SDK_OSS_NAME="PersonalStorage.SDK.OSS-$PERSONALSTORAGE_SDK_OSS_VERSION";
+PERSONALSTORAGE_SDK_OSS_TARBALL="PersonalStorage.SDK.OSS.git";
