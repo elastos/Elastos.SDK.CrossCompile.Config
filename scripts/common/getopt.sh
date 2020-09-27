@@ -12,8 +12,9 @@ getopt_parse_options()
         getopt_cmd="$(ls /usr/local/Cellar/gnu-getopt/*/bin/getopt)";
 	fi
 
-	getopt_ext=([0]= [1]=);
-	type getopt_extfunc_options &>/dev/null && local ret=$(getopt_extfunc_options) && getopt_ext=(${ret//;/ });
+    local ret=";";
+	type getopt_extfunc_options &>/dev/null && ret=$(getopt_extfunc_options);
+	getopt_ext=([0]="${ret%;*}" [1]=${ret##*;});
 
 	local args="--name getopt-script --options p:f:m:${getopt_ext[0]}ch \
                 --longoptions prefix:,platform:,arch:,${getopt_ext[1]},clean,help";

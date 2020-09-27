@@ -23,10 +23,16 @@ getopt_extfunc_usage()
 
        -g  --debug
                  Optional. build  project as debug.";
+
+    type custom_getopt_usage &>/dev/null && custom_getopt_usage;
 }
 getopt_extfunc_options()
 {
-	echo "sdtibg;enable-static,without-depends,with-test,ignore-build,force-build,debug";
+    local ret=";";
+	type custom_getopt_options &>/dev/null && ret=$(custom_getopt_options);
+	custom_getopt=([0]="${ret%;*}" [1]=${ret##*;});
+
+	echo "sdtibg${custom_getopt[0]};enable-static,without-depends,with-test,ignore-build,force-build,debug,${custom_getopt[1]}";
 }
 getopt_extfunc_processor()
 {
@@ -56,6 +62,11 @@ getopt_extfunc_processor()
 			CFG_DEBUG=true;
 			getopt_extfunc_processor_ret=1;
 			;;
+        (*)
+            custom_getopt_processor_ret=-1;
+            type custom_getopt_processor &>/dev/null && custom_getopt_processor "$1" "$2";
+            getopt_extfunc_processor_ret=$custom_getopt_processor_ret;
+            ;;
 	esac
 }
 
