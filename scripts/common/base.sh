@@ -57,3 +57,10 @@ BUILD_TARBALL_DIR="$BUILD_BASE_DIR/tarball";
 mkdir -p "$BUILD_TARBALL_DIR";
 
 DEBUG_VERBOSE=true;
+
+KERNEL_NAME=$(uname -s);
+SED_CMD='sed -i';
+if [ "$KERNEL_NAME" == "Darwin" ]; then
+    SED_CMD+=" .sed.bak";
+fi
+

@@ -76,9 +76,9 @@ build_project()
 	loginfo "change directory to $PROJECT_BUILDDIR";
 	cd "$PROJECT_BUILDDIR";
 
-	local cmake_ext_args="";
+	local cmake_ext_args="$CFG_CMAKE_EXTARGS";
 	if [[ $CFG_WITH_TEST == true ]]; then
-		cmake_ext_args+=" -DCFG_WITH_TEST=";
+		cmake_ext_args+=" -DCFG_WITH_TEST=ON";
 	fi
 	if [[ $CFG_TARGET_PLATFORM == "Android" ]]; then
 		cmake_ext_args+=" -DCFG_ANDROID_TOOLCHAIN_PATH=$CFG_ANDROID_TOOLCHAIN_PATH";
@@ -162,6 +162,7 @@ CFG_WITH_TEST=false;
 CFG_IGNORE_BUILD=false;
 CFG_FORCE_BUILD=false;
 CFG_DEBUG=false;
+${CFG_CMAKE_EXTARGS:=}
 PROJECT_NAME=${CFG_PROJECT_NAME:="Unknown"}
 
 main_run $@;

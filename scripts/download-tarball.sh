@@ -42,7 +42,7 @@ download_tarball()
 
     if [ ! -e "$tarball_downloaded" ]; then
         rm -rf "$tarball_path";
-        local cmd="curl --location '$tarball_url' --output '$tarball_path'";
+        local cmd="curl --fail --location '$tarball_url' --output '$tarball_path'";
         echo "$cmd";
         eval $cmd;
 

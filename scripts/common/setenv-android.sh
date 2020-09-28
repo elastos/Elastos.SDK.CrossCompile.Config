@@ -54,6 +54,7 @@ export CFG_ANDROID_TOOLCHAIN_PATH
 export PATH="$CFG_ANDROID_TOOLCHAIN_PATH/bin:$PATH"
 export CC=clang
 export CXX=clang++
+export RANLIB=${ANDROID_TOOLCHAIN}-ranlib
 #export CFLAGS="-D__ANDROID_API__=$CFG_ANDROID_SDK -fPIC -nostdlib"
 #export CXXFLAGS="-D__ANDROID_API__=$CFG_ANDROID_SDK -fPIC -nostdlib"
 export CFLAGS="-D__ANDROID_API__=$CFG_ANDROID_SDK -fPIC"
