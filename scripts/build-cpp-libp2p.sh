@@ -80,7 +80,7 @@ build_tarball()
         local libarray=$(find . -name *.a);
         for lib in ${libarray}; do
             cp -v "$lib" "$OUTPUT_DIR/lib";
-            $RANLIB "$OUTPUT_DIR/lib/$(basename $lib)";
+            ${ANDROID_TOOLCHAIN}-ranlib "$OUTPUT_DIR/lib/$(basename $lib)";
         done
 
         touch ".installed";
