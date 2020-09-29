@@ -12,6 +12,7 @@ config_tarball()
         $SED_CMD 's|HunterGate(|message(VERBOSE|'                            CMakeLists.txt;
         $SED_CMD 's|include(cmake/dependencies.cmake)|#&|'                   CMakeLists.txt;
         $SED_CMD 's|add_subdirectory(example)|#&|'                           CMakeLists.txt;
+        $SED_CMD 's|add_subdirectory(test)|#&|'                              CMakeLists.txt;
 
         $SED_CMD 's|.*|#&|'                                                  src/CMakeLists.txt;
         echo "" >>                                                           src/CMakeLists.txt;
@@ -50,11 +51,16 @@ config_tarball()
         echo '#pragma GCC diagnostic ignored "-Wsign-compare"' >             src/multi/multibase_codec/codecs/base32.cpp;
         echo "$content" >>                                                     src/multi/multibase_codec/codecs/base32.cpp;
 
+        cmake_ext_args="";
+        if [[ "$CFG_TARGET_PLATFORM" == "iOS" ]]; then
+            cmake_ext_args+="-DCMAKE_OSX_SYSROOT='$SYSROOT'";
+        fi
         cmake "$BUILD_DIR/$CPP_LIBP2P_NAME" \
             -DCMAKE_INSTALL_PREFIX="$OUTPUT_DIR" \
             -DCMAKE_PREFIX_PATH="$OUTPUT_DIR" \
             -DTESTING=OFF \
-            -DEXAMPLES=OFF;
+            -DEXAMPLES=OFF \
+            $cmake_ext_args;
         touch ".configured";
     fi
 	loginfo "${CPP_LIBP2P_TARBALL} has been configured."
@@ -77,10 +83,15 @@ build_tarball()
 	if [ ! -e ".installed" ]; then
         make -j$MAX_JOBS install;
 
+        RANLIB=ranlib;
+        if [[ "$CFG_TARGET_PLATFORM" == "Android" ]]; then
+            RANLIB=${ANDROID_TOOLCHAIN}-ranlib;
+        fi
+
         local libarray=$(find . -name *.a);
         for lib in ${libarray}; do
             cp -v "$lib" "$OUTPUT_DIR/lib";
-            ${ANDROID_TOOLCHAIN}-ranlib "$OUTPUT_DIR/lib/$(basename $lib)";
+            ${RANLIB} "$OUTPUT_DIR/lib/$(basename $lib)";
         done
 
         touch ".installed";

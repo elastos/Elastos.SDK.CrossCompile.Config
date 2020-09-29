@@ -16,15 +16,12 @@ build_tarball()
 	cd "$BUILD_DIR/$BOOST_NAME";
 
     if [ ! -e ".installed" ]; then
-        CXX_BAK="$CXX";
-        export CXX="g++";
-        ./bootstrap.sh --without-icu --with-libraries=date_time,random,program_options;
-
-        export CXX="$CXX_BAK";
+       env -i ./bootstrap.sh --with-toolset=clang --without-icu --with-libraries=date_time,random,program_options;
         ./b2 \
             --prefix="$OUTPUT_DIR" \
             --build-type=minimal \
             --no-cmake-config \
+            cxxflags="$CXXFLAGS" \
             link=static \
             install;
         touch ".installed";

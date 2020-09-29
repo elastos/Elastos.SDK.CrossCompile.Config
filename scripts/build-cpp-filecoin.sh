@@ -83,11 +83,15 @@ config_tarball()
         echo "namespace fc::codec::cbor" >>                                  core/codec/cbor/cbor_decode_stream.hpp;
         echo "$content_tail" >>                                              core/codec/cbor/cbor_decode_stream.hpp;
 
-
+        cmake_ext_args="";
+        if [[ "$CFG_TARGET_PLATFORM" == "iOS" ]]; then
+            cmake_ext_args+="-DCMAKE_OSX_SYSROOT='$SYSROOT'";
+        fi
         cmake "$BUILD_DIR/$CPP_FILECOIN_NAME" \
             -DCMAKE_INSTALL_PREFIX="$OUTPUT_DIR" \
             -DCMAKE_PREFIX_PATH="$OUTPUT_DIR" \
-            -DTESTING=OFF;
+            -DTESTING=OFF \
+            $cmake_ext_args;
         touch ".configured";
     fi
 	loginfo "${CPP_FILECOIN_TARBALL} has been configured."
@@ -107,16 +111,20 @@ build_tarball()
 
     config_tarball;
 
-    pwd
     if [ ! -e ".installed" ]; then
         make -j$MAX_JOBS;
+
+        RANLIB=ranlib;
+        if [[ "$CFG_TARGET_PLATFORM" == "Android" ]]; then
+            RANLIB=${ANDROID_TOOLCHAIN}-ranlib;
+        fi
 
         mkdir -p "$OUTPUT_DIR"/{lib,include/cpp-filecoin}/;
         rsync -Rv $(find core -name "*.hpp") "$OUTPUT_DIR/include/cpp-filecoin";
         local libarray=$(find . -name *.a);
         for lib in ${libarray}; do
             cp -v "$lib" "$OUTPUT_DIR/lib";
-            ${ANDROID_TOOLCHAIN}-ranlib "$OUTPUT_DIR/lib/$(basename $lib)";
+            ${RANLIB} "$OUTPUT_DIR/lib/$(basename $lib)";
         done
 
         mkdir -p "$OUTPUT_DIR/include/cpp-filecoin/tinycbor";

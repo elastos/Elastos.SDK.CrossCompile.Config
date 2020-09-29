@@ -19,6 +19,7 @@ build_tarball()
         cmake "$BUILD_DIR/$GSL_NAME" \
             -DCMAKE_INSTALL_PREFIX="$OUTPUT_DIR" \
             -DCMAKE_PREFIX_PATH="$OUTPUT_DIR" \
+            -DCMAKE_CXX_COMPILER_FORCED=ON \
             -DGSL_TEST=OFF;
         touch ".configured";
     fi

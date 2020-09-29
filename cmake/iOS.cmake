@@ -293,7 +293,7 @@ set(CMAKE_CXX_FLAGS "${XARCH_CFLAGS} ${BITCODE_FLAGS} ${CXX_FLAGS} -fobjc-abi-ve
 set(CMAKE_FIND_ROOT_PATH 
   ${IOS_SDK_PATH}
   ${CMAKE_PREFIX_PATH}
-  CACHE string  "iOS find search path root" FORCE)
+  CACHE STRING  "iOS find search path root" FORCE)
 
 set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM BOTH) # cmake 3.10 can not find ninja if ONLY
 set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)

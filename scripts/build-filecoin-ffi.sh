@@ -12,11 +12,21 @@ check_cargo()
     CARGO_PATH=$(which cargo);
 
     loginfo "Found cargo at [$CARGO_PATH]";
+    local toolchain=;
+    if [[ "$CFG_TARGET_PLATFORM" == "Android" ]]; then
+        toolchain=${ANDROID_TOOLCHAIN};
+    elif [[ "$CFG_TARGET_PLATFORM" == "iOS" ]]; then
+        toolchain=${IOS_TOOLCHAIN/darwin/ios};
+    fi
 
     CARGO_CFG_PATH="$(dirname "$CARGO_PATH")/../config";
-    echo "[target.${ANDROID_TOOLCHAIN}]"  >  "$CARGO_CFG_PATH";
-    echo "ar='$CC'"                         >> "$CARGO_CFG_PATH";
-    echo "linker='$CC'"                     >> "$CARGO_CFG_PATH";
+    if [[ ! -z "$toolchain" ]]; then
+        echo "[target.${toolchain}]"            >  "$CARGO_CFG_PATH";
+        echo "ar='$CC'"                         >> "$CARGO_CFG_PATH";
+        echo "linker='$CC'"                     >> "$CARGO_CFG_PATH";
+    else
+        rm "$CARGO_CFG_PATH";
+    fi
 }
 
 config_tarball()
@@ -70,13 +80,24 @@ build_tarball()
 	if [ ! -e ".installed" ]; then
         check_cargo;
 
+        local toolchain=;
+        if [[ "$CFG_TARGET_PLATFORM" == "Android" ]]; then
+            toolchain="${ANDROID_TOOLCHAIN}";
+        elif [[ "$CFG_TARGET_PLATFORM" == "iOS" ]]; then
+            toolchain="${IOS_TOOLCHAIN/darwin/ios}";
+        fi
+
         pushd rust;
-        rustup target add "${ANDROID_TOOLCHAIN}";
-        cargo build --package=filcrypto --target="${ANDROID_TOOLCHAIN}" --release;
+        if [[ ! -z "$toolchain" ]]; then
+            rustup target add "${toolchain}";
+            cargo build --package=filcrypto --target="${toolchain}" --release;
+        else
+            cargo build --package=filcrypto --release;
+        fi
 
         mkdir -p "$OUTPUT_DIR"/{lib,include}/;
-        cp "target/${ANDROID_TOOLCHAIN}/release/libfilcrypto.a" "$OUTPUT_DIR/lib";
-        cp "$(find target/${ANDROID_TOOLCHAIN}/release -name filcrypto.h)" "$OUTPUT_DIR/include";
+        cp "target/${toolchain}/release/libfilcrypto.a" "$OUTPUT_DIR/lib";
+        cp "$(find target/${toolchain}/release -name filcrypto.h)" "$OUTPUT_DIR/include";
 
         popd;
         touch ".installed";

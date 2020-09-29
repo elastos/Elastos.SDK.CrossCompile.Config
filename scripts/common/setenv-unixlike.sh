@@ -22,3 +22,4 @@ export CC=clang
 export CXX=clang++
 export CFLAGS="-fPIC"
 export CXXFLAGS="-fPIC"
+export CPPFLAGS="$CXXFLAGS"

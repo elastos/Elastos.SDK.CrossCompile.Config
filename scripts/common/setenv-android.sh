@@ -58,6 +58,7 @@ export CXX=clang++
 #export CXXFLAGS="-D__ANDROID_API__=$CFG_ANDROID_SDK -fPIC -nostdlib"
 export CFLAGS="-D__ANDROID_API__=$CFG_ANDROID_SDK -fPIC"
 export CXXFLAGS="-D__ANDROID_API__=$CFG_ANDROID_SDK -fPIC"
+export CPPFLAGS="$CXXFLAGS"
 
 echo "===================================";
 echo "ARCH:       ${ARCH_LIST[$LIST_IDX]}";

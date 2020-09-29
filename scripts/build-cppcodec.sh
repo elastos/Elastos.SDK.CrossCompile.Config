@@ -16,10 +16,15 @@ build_tarball()
 	cd "$BUILD_DIR/$CPPCODEC_NAME";
 
 	if [ ! -e ".configured" ]; then
+        cmake_ext_args="";
+        if [[ "$CFG_TARGET_PLATFORM" == "iOS" ]]; then
+            cmake_ext_args+="-DCMAKE_OSX_SYSROOT='$SYSROOT'";
+        fi
         cmake "$BUILD_DIR/$CPPCODEC_NAME" \
             -DCMAKE_INSTALL_PREFIX="$OUTPUT_DIR" \
             -DCMAKE_PREFIX_PATH="$OUTPUT_DIR" \
-            -DBUILD_TESTING=OFF;
+            -DBUILD_TESTING=OFF \
+            $cmake_ext_args;
         touch ".configured";
     fi
 	loginfo "${CPPCODEC_TARBALL} has been configured."
