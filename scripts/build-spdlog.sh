@@ -40,6 +40,11 @@ build_tarball()
 
 	if [ ! -e ".installed" ]; then
         make -j$MAX_JOBS install;
+
+        local libarray=$(find . -name *.a); # reserve header only
+        for lib in ${libarray}; do
+            rm "$OUTPUT_DIR/lib/$(basename $lib)";
+        done
         touch ".installed";
     fi
 	loginfo "$SPDLOG_TARBALL has been installed."
