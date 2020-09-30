@@ -31,7 +31,7 @@ build_all()
 
 			echo "Build for $platform ($abi)";
 			if [ "$(type -t build_extfunc)" == "function" ]; then
-				build_extfunc --platform=$platform --arch=$abi --enable-static;
+				build_extfunc --platform=$platform --arch=$abi --enable-static $@;
 			else
 				logerr_and_exit "Function build_extfunc() is not defined.";
 			fi
@@ -106,7 +106,7 @@ package_ios()
 main_run()
 {
 	echo "Appoint to build for $PACKAGE_PLATFORM";
-	build_all;
+	build_all $@;
 
 	loginfo "Remove previous packages in $PACKAGE_DIR";
 	rm -rf "$PACKAGE_DIR";
