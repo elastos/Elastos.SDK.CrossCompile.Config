@@ -25,7 +25,7 @@ check_cargo()
         echo "ar='$CC'"                         >> "$CARGO_CFG_PATH";
         echo "linker='$CC'"                     >> "$CARGO_CFG_PATH";
     else
-        rm "$CARGO_CFG_PATH";
+        rm -f "$CARGO_CFG_PATH";
     fi
 }
 
