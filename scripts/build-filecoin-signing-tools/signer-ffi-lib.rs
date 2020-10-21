@@ -11,6 +11,7 @@ use filecoin_signer::{
     elastos_sign,
     elastos_verify,
     elastos_gen_serialize_tx,
+    elastos_is_valid_address,
 
     PrivateKey,
     PublicKey,
@@ -140,5 +141,20 @@ create_fn!(elastos_filecoin_signer_serialize_tx|Java_Elastos_FilecoinSigner_Seri
         let unsigned_message_json = get_string!(etc, unsigned_message_json)?;
         let unsigned_message_cbor = elastos_gen_serialize_tx(get_string_ref(&unsigned_message_json))?;
         create_string!(etc, hex::encode(&unsigned_message_cbor.0))
+    })
+});
+
+create_fn!(elastos_filecoin_signer_is_valid_addr|Java_Elastos_FilecoinSigner_IsValidAddr: (
+    address: str_arg_ty!(),
+    error: &mut ExternError
+) -> str_ret_ty!(), |etc| {
+    call_with_result(error, || -> Result<str_ret_ty!(), ExternError> {
+        let address = get_string!(etc, address)?;
+        let valid = elastos_is_valid_address(get_string_ref(&address))?;
+        let result = match valid {
+            true => "t",
+            false => "f",
+        };
+        create_string!(etc, result.to_string())
     })
 });

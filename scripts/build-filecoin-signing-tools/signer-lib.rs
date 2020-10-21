@@ -76,3 +76,10 @@ pub fn elastos_gen_serialize_tx(
 
     Ok(unsigned_message_cbor)
 }
+
+pub fn elastos_is_valid_address(
+    address: &str,
+) -> Result<bool, SignerError> {
+    let _address = Address::from_str(address)?;
+    Ok(true)
+}
